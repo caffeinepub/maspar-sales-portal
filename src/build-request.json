@@ -1,85 +1,72 @@
 {
   "kind": "build_request",
-  "title": "Fix theme not applying: switch to Orange #FAA831 with a 70% grey portal theme",
-  "projectName": "Maspar Portal",
+  "title": "Remove Collection UI from Admin page",
+  "projectName": "Maspar Sales Portal",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-17",
-      "text": "Update the global theme tokens so the app primary brand color is Orange #FAA831 (replacing any remaining #F15A22) and the overall look is a grey-dominant (\"70% grey\") glassmorphism theme, while keeping orange as the accent for key UI emphasis (rings, active states, highlights).",
+      "id": "REQ-42",
+      "text": "Remove the user-facing \"Collection\" field from the Admin upload form so Admin users cannot see or change any collection value when creating a catalog item.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-3"
         ],
         "quotes": [
-          "mer bole hye change nahi huye hai ek bar check kro or orange (#FAA831) & 70% grey theme rkho"
+          "Remov Collestion from admin page"
         ]
       },
       "acceptanceCriteria": [
-        "In frontend/src/index.css, update the primary color and any orange-gradient definitions so the visible header gradient and primary accents reflect #FAA831 (not #F15A22).",
-        "In frontend/tailwind.config.js, update the Maspar brand color mapping so maspar.orange is #FAA831 and any orange-tinted shadow/glass values are aligned to the new orange.",
-        "The default page background, surfaces (glass cards), and muted/secondary UI read as predominantly grey-neutral (not orange-tinted), with orange used only for accents like active rings, primary buttons, and highlight glows."
+        "Admin Upload form no longer renders a \"Collection\" label/control anywhere on the Admin page.",
+        "Submitting the Admin Upload form still succeeds and creates a valid catalog item (no runtime/type errors).",
+        "A safe default collection value is applied internally (not shown in UI) so existing catalog data shape continues to work."
       ]
     },
     {
-      "id": "REQ-18",
-      "text": "Audit and fix any UI elements that still visually render with the old orange theme or inconsistent greys, ensuring the updated orange + grey theme is applied consistently across the Header, Tabs navigation, Collection cards, Search/Filters panel, Item grid cards, and the Media viewer modal.",
+      "id": "REQ-43",
+      "text": "Remove the \"Collection\" column from the Admin catalog table so existing items no longer display collection values on the Admin page.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-3"
         ],
         "quotes": [
-          "mer bole hye change nahi huye hai ek bar check kro"
+          "Remov Collestion from admin page"
         ]
       },
       "acceptanceCriteria": [
-        "No prominent UI element shows the previous orange hue (#F15A22) after the update; all orange accents match the new brand orange (#FAA831).",
-        "Collection selection (ring/shadow), hover lift glow, and primary highlights use the updated primary color and look consistent between Public Viewer and Admin UI.",
-        "Grey surfaces and text contrast remain readable in both light and dark modes (no washed-out text on glass cards)."
+        "Admin catalog table header and rows no longer include a \"Collection\" column/cells.",
+        "The table layout remains usable on mobile/desktop and Actions still work (Remove, etc.)."
       ]
     },
     {
-      "id": "REQ-19",
-      "text": "Ensure the updated theme changes are actually reflected in the deployed build by removing/avoiding hardcoded color values in component classNames where they override theme tokens, and by relying on the CSS variables/theme tokens for all primary/secondary/accent styling.",
+      "id": "REQ-44",
+      "text": "Update Admin user-facing text so the Admin area contains no visible \"Collection\" wording after removing the Collection UI.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-3"
         ],
         "quotes": [
-          "mer bole hye change nahi huye hai ek bar check kro"
+          "Remov Collestion from admin page"
         ]
       },
       "acceptanceCriteria": [
-        "No component relies on hardcoded hex values for the primary brand color when a theme token (e.g., primary/accent/ring) should be used instead.",
-        "A fresh load of the app shows the new theme immediately without requiring manual user steps (e.g., no hidden dependency on cached old CSS)."
+        "No Admin-page labels, headings, helper text, or table headers contain the word \"Collection\".",
+        "All remaining Admin UI text is English-only and still reads clearly."
       ]
     }
   ],
   "constraints": [
-    "Do not modify files under frontend/src/components/ui (they are read-only); compose them as-is.",
-    "Do not edit the immutable hook files under frontend/src/hooks listed in SYSTEM_CONTEXT.",
-    "Keep the current single-actor backend unchanged unless strictly necessary; this request is frontend theme-only."
+    "Frontend immutable paths must not be edited: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui.",
+    "Keep best-effort content protection behaviors unchanged (no right-click / no drag) for existing media previews/viewers."
   ],
   "nonGoals": [
-    "Do not add new product features or change the portal information architecture.",
-    "Do not change authentication behavior, catalog storage, or any LocalStorage data formats as part of this theme fix.",
-    "Do not introduce third-party theming libraries."
+    "Do not redesign the Public Viewer filtering/organization as part of this change.",
+    "Do not introduce backend persistence; continue using existing client-side/localStorage behavior."
   ],
   "imageRequirements": {
     "required": [],
     "edits": []
-  },
-  "userProfileUpdate": {
-    "goalsToAdd": [],
-    "goalsToRemove": [],
-    "preferencesToAdd": [],
-    "preferencesToRemove": [],
-    "miscToAdd": [],
-    "miscToRemove": [],
-    "fieldsToSet": {},
-    "fieldsToDelete": []
   }
 }

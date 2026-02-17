@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { MediaType, BilingualLabel } from '../../lib/catalogTypes';
+import type { MediaType } from '../../lib/catalogTypes';
 import { PREDEFINED_LABELS } from '../../lib/predefinedLabels';
 import { UI_TEXT } from '../../lib/uiText';
 import { Button } from '../ui/button';
@@ -13,7 +13,7 @@ interface AdminUploadFormProps {
   onAdd: (item: {
     title: string;
     collection: string;
-    label: BilingualLabel;
+    label: string;
     mediaType: MediaType;
     mediaSource: string;
   }) => void;
@@ -21,14 +21,12 @@ interface AdminUploadFormProps {
 
 export function AdminUploadForm({ onAdd }: AdminUploadFormProps) {
   const [title, setTitle] = useState('');
-  const [collection, setCollection] = useState('blaize');
-  const [labelEn, setLabelEn] = useState('');
-  const [labelHi, setLabelHi] = useState('');
+  const [label, setLabel] = useState('');
   const [mediaType, setMediaType] = useState<MediaType>('image');
   const [mediaSource, setMediaSource] = useState('');
 
   const handlePredefinedLabelSelect = (value: string) => {
-    setLabelEn(value);
+    setLabel(value);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -36,16 +34,15 @@ export function AdminUploadForm({ onAdd }: AdminUploadFormProps) {
     
     onAdd({
       title,
-      collection,
-      label: { en: labelEn, hi: labelHi },
+      collection: 'colorart', // Apply default collection internally
+      label,
       mediaType,
       mediaSource
     });
 
     // Reset form
     setTitle('');
-    setLabelEn('');
-    setLabelHi('');
+    setLabel('');
     setMediaSource('');
   };
 
@@ -56,69 +53,40 @@ export function AdminUploadForm({ onAdd }: AdminUploadFormProps) {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="title">{UI_TEXT.admin.formTitle}</Label>
-              <Input
-                id="title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                required
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="collection">{UI_TEXT.admin.formCollection}</Label>
-              <Select value={collection} onValueChange={setCollection}>
-                <SelectTrigger id="collection">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="blaize">Blaize</SelectItem>
-                  <SelectItem value="colorart">Colorart</SelectItem>
-                  <SelectItem value="bedding">Bedding</SelectItem>
-                  <SelectItem value="cushions">Cushions</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+          <div className="space-y-2">
+            <Label htmlFor="title">{UI_TEXT.admin.formTitle}</Label>
+            <Input
+              id="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+            />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="predefinedLabel">{UI_TEXT.admin.formPredefinedLabel}</Label>
-            <Select value={labelEn} onValueChange={handlePredefinedLabelSelect}>
+            <Select value={label} onValueChange={handlePredefinedLabelSelect}>
               <SelectTrigger id="predefinedLabel">
                 <SelectValue placeholder="Select a label..." />
               </SelectTrigger>
               <SelectContent>
-                {PREDEFINED_LABELS.map((label) => (
-                  <SelectItem key={label} value={label}>
-                    {label}
+                {PREDEFINED_LABELS.map((labelOption) => (
+                  <SelectItem key={labelOption} value={labelOption}>
+                    {labelOption}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="labelEn">{UI_TEXT.admin.formLabelEn}</Label>
-              <Input
-                id="labelEn"
-                value={labelEn}
-                onChange={(e) => setLabelEn(e.target.value)}
-                required
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="labelHi">{UI_TEXT.admin.formLabelHi}</Label>
-              <Input
-                id="labelHi"
-                value={labelHi}
-                onChange={(e) => setLabelHi(e.target.value)}
-                required
-              />
-            </div>
+          <div className="space-y-2">
+            <Label htmlFor="label">{UI_TEXT.admin.formLabel}</Label>
+            <Input
+              id="label"
+              value={label}
+              onChange={(e) => setLabel(e.target.value)}
+              required
+            />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -1,57 +1,56 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-17T06:07:29.004Z",
-  "summary": "Theme token updates for orange (#FAA831) and grey-dominant glassmorphism were applied in global CSS and Tailwind config, but there’s no diff evidence of auditing/updating specific UI components to remove old hardcoded colors or ensure consistency across Header/Tabs/Cards/Modal. Additionally, non-theme feature descriptions were introduced/updated in state/summary files.",
-  "missing_requirements": [
-    {
-      "id": "REQ-18",
-      "requirement": "Audit and fix UI elements still rendering with old orange (#F15A22) or inconsistent greys across Header, Tabs navigation, Collection cards, Search/Filters panel, Item grid cards, and Media viewer modal.",
-      "reason": "Diff shows only global theme/token changes (index.css, tailwind.config.js) and does not show any component-level updates in the listed UI areas to ensure old orange is removed and greys are consistent.",
-      "evidence": [
-        "frontend/src/index.css",
-        "frontend/tailwind.config.js"
-      ]
-    },
-    {
-      "id": "REQ-19",
-      "requirement": "Remove/avoid hardcoded color values in component classNames that override theme tokens; rely on CSS variables/theme tokens for primary/secondary/accent styling so the new theme reflects immediately.",
-      "reason": "No component files are shown as modified in the diff summary; only theme token definitions/config were updated, so there is no evidence that hardcoded hex values in component classNames were audited/removed.",
-      "evidence": [
-        "frontend/src/index.css",
-        "frontend/tailwind.config.js"
-      ]
-    }
-  ],
+  "generatedAt": "2026-02-17T08:01:02.854Z",
+  "summary": "REQ-42/43/44 appear implemented: Admin upload form no longer renders a Collection control and applies an internal default; Admin catalog table no longer shows a Collection column; admin UI text in the shown files no longer includes the word \"Collection\". However, the diff summary indicates multiple additional, unrelated feature changes beyond the BuildRequest scope.",
+  "missing_requirements": [],
   "hallucinated_features": [
     {
-      "description": "Added/updated documentation/state describing a \"New Arrivals\" homepage banner uploaded via Admin (1280x720).",
-      "reason": "BuildRequest is theme-only and explicitly lists non-goals as not adding new product features or changing portal information architecture.",
+      "description": "Removed bilingual label support / introduced English-only label behavior (and/or label language management changes).",
+      "reason": "BuildRequest only asked to remove Collection UI from Admin; it did not request changing label language/bilingual support.",
       "evidence": [
-        "project_state.json"
+        "frontend-file-summaries.txt (catalogTypes.ts: \"removed bilingual label support\"; labelLanguage.ts: \"Language preference management for bilingual labels\")",
+        "project_state.json (summary mentions \"English-only UI (no Hindi)\")"
       ]
     },
     {
-      "description": "Added/updated documentation/state describing label language behavior (e.g., \"English-only labels (no Hindi)\"), which is unrelated to theme fix and conflicts with other file summary claims about bilingual labels.",
-      "reason": "BuildRequest is theme-only and includes a non-goal to not change LocalStorage data formats/auth/catalog behavior; these label/auth/catalog feature descriptions are out of scope for the theme change request.",
+      "description": "Brand/theme and styling overhaul (Maspar brand colors update, glassmorphism utilities, Tailwind token changes, orange gradient header styling).",
+      "reason": "Not requested; requirements are limited to removing Collection UI from Admin and updating Admin text.",
       "evidence": [
-        "project_state.json",
-        "frontend-file-summaries.txt"
+        "frontend-file-summaries.txt (index.css, tailwind.config.js: brand colors/glassmorphism updates)",
+        "project_state.json (summary describes broader UI redesign)"
       ]
     },
     {
-      "description": "Added/updated documentation describing an Admin upload form feature: predefined label dropdown that auto-fills English label input.",
-      "reason": "Not requested (theme-only request; non-goals prohibit adding new product features).",
+      "description": "Changes to collections definitions and cleanup/migration logic (e.g., removing Blaize, cleanup of all Blaize items on load).",
+      "reason": "Not requested; non-goal explicitly says not to redesign Public Viewer filtering/organization.",
       "evidence": [
-        "frontend-file-summaries.txt"
+        "frontend-file-summaries.txt (collections.ts: \"Blaize removed\"; useCatalog.ts: \"cleanup of deprecated seed items and all Blaize collection items\")",
+        "frontend-file-summaries.txt (seedCatalog.ts: \"including Blaize Collection Catalog for cleanup logic\")"
+      ]
+    },
+    {
+      "description": "Public Viewer feature changes (e.g., label filter dropdown showing thumbnails next to each label option).",
+      "reason": "Not requested and potentially conflicts with the non-goal of not redesigning Public Viewer filtering/organization.",
+      "evidence": [
+        "frontend-file-summaries.txt (SearchAndFilters.tsx: \"thumbnail images displayed next to each label option\")"
+      ]
+    },
+    {
+      "description": "Admin area composition changes unrelated to Collection UI (e.g., banner manager in Admin area).",
+      "reason": "BuildRequest only targets Collection UI removal; adding/altering other admin modules was not requested.",
+      "evidence": [
+        "frontend-file-summaries.txt (AdminArea.tsx: \"composing the banner manager, upload form, and catalog manager\")",
+        "project_state.json (summary mentions \"Admin-uploaded New Arrivals banner\")"
       ]
     }
   ],
-  "confidence": 0.72,
+  "confidence": 0.74,
   "changed_files": [
     "frontend-file-summaries.txt",
-    "frontend/src/index.css",
-    "frontend/tailwind.config.js",
+    "frontend/src/components/admin/AdminCatalogManager.tsx",
+    "frontend/src/components/admin/AdminUploadForm.tsx",
+    "frontend/src/lib/uiText.ts",
     "project_state.json"
   ]
 }

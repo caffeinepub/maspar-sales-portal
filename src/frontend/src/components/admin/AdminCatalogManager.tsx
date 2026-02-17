@@ -33,7 +33,6 @@ export function AdminCatalogManager({ items, onRemove }: AdminCatalogManagerProp
               <TableHeader>
                 <TableRow>
                   <TableHead>Title</TableHead>
-                  <TableHead>Collection</TableHead>
                   <TableHead>Type</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
@@ -42,7 +41,6 @@ export function AdminCatalogManager({ items, onRemove }: AdminCatalogManagerProp
                 {items.map((item) => (
                   <TableRow key={item.id}>
                     <TableCell className="font-medium">{item.title}</TableCell>
-                    <TableCell className="capitalize">{item.collection}</TableCell>
                     <TableCell className="uppercase text-xs">{item.mediaType}</TableCell>
                     <TableCell className="text-right">
                       <Button

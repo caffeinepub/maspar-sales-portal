@@ -1,18 +1,22 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 9,
-  "summary": "Premium, mobile-responsive Maspar sales team portal (HTML/CSS/JS, CodePen-ready) with public viewer + admin upload, glassmorphism UI in updated brand theme (Orange #FAA831 + 70% grey), localStorage-based catalog management, protected viewing for PDFs/videos/images, English-only labels (no Hindi), and a New Arrivals homepage banner uploaded via Admin (1280x720).",
+  "projectStateVersion": 27,
+  "summary": "Mobile-responsive Maspar sales team portal (HTML/CSS/JS, CodePen-ready) with sales-team login (no public viewer) + secure Admin panel, English-only UI (no Hindi), corporate clean modern white/soft-shadow card UI with sidebar navigation, localStorage-based catalog/media management (PDF/image/video) with view-only protected viewing (best-effort no-download), and support for item metadata including Product Name, Label (terminology replaces Collection), Preview/Open, description, edit/replace file, delete/hide, and reordering; includes Admin-uploaded New Arrivals banner (1280x720).",
   "architectural_notes": [
     "Pure HTML/CSS/JS only; CDN libraries allowed (e.g., PDF.js); must run directly on CodePen.",
     "No server backend; persist catalogs/metadata via LocalStorage.",
     "Content protection is best-effort (disable right-click/drag; no-download UX), not true DRM.",
     "Remove bilingual (English/Hindi) label support and any language toggle; use English-only labels throughout.",
-    "Update brand/theme colors to Orange #FAA831 and a 70% grey dominant UI theme (replace prior orange #F15A22 usage)."
+    "Update brand/theme colors to Orange #FAA831 and a 70% grey dominant UI theme (replace prior orange #F15A22 usage).",
+    "User-side access now requires sales-team login (no public/no-login viewer).",
+    "UI copy requirement: replace the term “Collection” with “Label” everywhere in the app."
   ],
   "known_issues": [
-    "User reports requested UI changes were not applied/visible; verify latest build reflects requested updates (especially theme colors)."
+    "User reports requested UI changes were not applied/visible; verify latest build reflects requested updates (especially theme colors).",
+    "New Arrivals banner is not showing on the home page (regression/bug to fix).",
+    "Build/deploy pipeline hit a configuration error (\"Please notify the Caffeine team\"); blocks applying latest changes until resolved."
   ],
-  "isFixRequest": true,
+  "isFixRequest": false,
   "existing_features": [
     {
       "id": "feature-create-a-mobile-responsive-portal-ui-with-a-premium-glassmorphism-look-using-maspar-brand-colors-orange-f15a22-grey-4a4a4a-white-including-a-header-with-an-orange-gradient-minimal-layout-and-smooth-hover-lift-transition-animations",
@@ -149,6 +153,206 @@
         "REQ-19"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-remove-the-hindi-language-option-from-the-public-viewer-by-deleting-the-en-hi-language-toggle-ui-and-any-related-state-props-so-the-public-viewer-is-english-only",
+      "title": "Remove the Hindi language option from the Public Viewer by deleting the EN/HI language toggle UI and any related state/props so the Public Viewer is English-only.",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-make-catalog-item-labels-english-only-by-removing-hindi-label-fields-from-admin-upload-edit-flows-and-updating-the-catalog-item-type-so-items-store-a-single-english-label-value-no-bilingual-label-object",
+      "title": "Make catalog item labels English-only by removing Hindi label fields from Admin upload/edit flows and updating the catalog item type so items store a single English label value (no bilingual label object).",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-localstorage-based-label-language-preference-handling-including-the-language-storage-key-and-helper-functions-since-the-app-is-english-only",
+      "title": "Remove localStorage-based label-language preference handling (including the language storage key and helper functions) since the app is English-only.",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-safe-client-side-compatibility-migration-for-existing-localstorage-catalog-data-so-previously-saved-bilingual-labels-are-converted-to-english-only-labels-without-breaking-the-app",
+      "title": "Add a safe client-side compatibility migration for existing localStorage catalog data so previously-saved bilingual labels are converted to English-only labels without breaking the app.",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-all-user-facing-ui-text-so-there-is-no-hindi-text-and-no-language-related-wording-e-g-remove-the-language-label-and-ensure-remaining-user-facing-text-stays-in-english",
+      "title": "Update all user-facing UI text so there is no Hindi text and no language-related wording (e.g., remove the 'Language' label), and ensure remaining user-facing text stays in English.",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-new-arrivals-banner-on-the-public-viewer-home-page-so-it-reliably-appears-whenever-a-banner-has-been-uploaded-in-admin-including-when-the-user-uploads-removes-the-banner-without-a-full-page-refresh",
+      "title": "Fix the \"New Arrivals\" banner on the Public Viewer home page so it reliably appears whenever a banner has been uploaded in Admin, including when the user uploads/removes the banner without a full page refresh.",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-clarify-and-complete-the-unfinished-user-request-and-remove-the-by-identifying-any-incomplete-stray-ui-text-or-ui-element-that-is-currently-visible-and-removing-it-if-no-such-text-exists-in-the-ui-add-a-minimal-confirmation-prompt-in-the-admin-area-or-developer-notes-in-code-indicating-what-specifically-should-be-removed-and-where-so-the-requirement-can-be-completed-unambiguously",
+      "title": "Clarify and complete the unfinished user request \"and remove the\" by identifying any incomplete/stray UI text or UI element that is currently visible and removing it; if no such text exists in the UI, add a minimal confirmation prompt in the Admin area (or developer notes in code) indicating what specifically should be removed and where, so the requirement can be completed unambiguously.",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-replace-the-public-viewer-collection-filter-control-with-a-predefined-label-filter-update-the-searchandfilters-dropdown-to-list-predefined-labels-plus-an-all-labels-option-and-update-publicviewer-state-filtering-logic-to-filter-items-by-item-label-instead-of-item-collection",
+      "title": "Replace the Public Viewer collection filter control with a predefined-label filter: update the SearchAndFilters dropdown to list PREDEFINED_LABELS (plus an \"All Labels\" option) and update PublicViewer state + filtering logic to filter items by item.label (instead of item.collection).",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-or-hide-the-collection-card-selector-ui-in-the-public-viewer-so-there-is-no-collection-selection-ui-competing-with-the-new-predefined-label-filter",
+      "title": "Remove or hide the collection card selector UI in the Public Viewer so there is no collection-selection UI competing with the new predefined-label filter.",
+      "reqIds": [
+        "REQ-28"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-user-facing-ui-text-that-references-collection-filtering-to-use-predefined-label-wording-english-only-including-updating-ui-text-keys-used-by-the-public-viewer-filter-dropdown-e-g-change-filter-by-collection-all-collections-to-filter-by-predefined-label-all-labels",
+      "title": "Update user-facing UI text that references collection filtering to use predefined-label wording (English only), including updating UI_TEXT keys used by the Public Viewer filter dropdown (e.g., change \"Filter by Collection\" / \"All Collections\" to \"Filter by Predefined Label\" / \"All Labels\").",
+      "reqIds": [
+        "REQ-29"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-the-three-catalog-items-titled-colorart-showcase-bedding-essentials-and-cushion-designs-so-they-no-longer-appear-as-panels-cards-in-the-catalog-grid-ui-as-shown-in-the-provided-screenshot",
+      "title": "Remove the three catalog items titled \"Colorart Showcase\", \"Bedding Essentials\", and \"Cushion Designs\" so they no longer appear as panels/cards in the catalog grid UI (as shown in the provided screenshot).",
+      "reqIds": [
+        "REQ-30"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-default-seed-catalog-so-it-no-longer-seeds-the-removed-items-specifically-the-seed-entries-currently-titled-colorart-showcase-bedding-essentials-and-cushion-designs-and-add-a-safe-client-side-cleanup-so-previously-seeded-instances-of-those-items-are-removed-from-localstorage-on-load",
+      "title": "Update the default/seed catalog so it no longer seeds the removed items (specifically the seed entries currently titled \"Colorart Showcase\", \"Bedding Essentials\", and \"Cushion Designs\"), and add a safe client-side cleanup so previously-seeded instances of those items are removed from LocalStorage on load.",
+      "reqIds": [
+        "REQ-31"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-the-blaize-catalog-collection-from-the-app-so-it-no-longer-appears-or-can-be-created-a-remove-blaize-from-the-default-collection-list-b-remove-the-seed-item-titled-blaize-collection-catalog-so-it-is-not-seeded-on-first-run-c-add-a-safe-client-side-cleanup-on-load-to-remove-any-existing-localstorage-catalog-items-that-are-part-of-the-blaize-catalog-at-minimum-items-with-title-blaize-collection-catalog-and-or-collection-id-blaize-and-d-update-the-admin-upload-form-so-blaize-is-not-available-as-a-selectable-collection-and-is-not-used-as-the-default-collection-value",
+      "title": "Remove the Blaize catalog/collection from the app so it no longer appears or can be created: (a) remove Blaize from the default collection list, (b) remove the seed item titled \"Blaize Collection Catalog\" so it is not seeded on first run, (c) add a safe client-side cleanup on load to remove any existing LocalStorage catalog items that are part of the Blaize catalog (at minimum: items with title \"Blaize Collection Catalog\" and/or collection id \"blaize\"), and (d) update the Admin Upload form so Blaize is not available as a selectable collection and is not used as the default collection value.",
+      "reqIds": [
+        "REQ-32"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-label-thumbnail-capability-for-predefined-labels-by-providing-a-thumbnail-image-for-each-label-in-predefined-labels-and-displaying-it-in-the-public-viewer-label-ui-show-the-thumbnail-next-to-each-label-option-in-the-filter-by-predefined-label-dropdown-and-show-the-selected-label-s-thumbnail-alongside-the-selected-label-value-when-a-specific-label-not-all-labels-is-selected",
+      "title": "Add a \"Label Thumbnail\" capability for predefined labels by providing a thumbnail image for each label in PREDEFINED_LABELS and displaying it in the Public Viewer label UI: show the thumbnail next to each label option in the \"Filter by Predefined Label\" dropdown, and show the selected label’s thumbnail alongside the selected label value when a specific label (not \"All Labels\") is selected.",
+      "reqIds": [
+        "REQ-33"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-display-label-thumbnails-in-the-catalog-grid-by-showing-the-corresponding-predefined-label-thumbnail-next-to-or-directly-above-the-item-label-text-in-each-catalog-item-card-when-the-label-matches-one-of-the-predefined-labels-if-the-label-does-not-match-a-predefined-label-show-the-existing-label-text-without-a-thumbnail",
+      "title": "Display label thumbnails in the catalog grid by showing the corresponding predefined-label thumbnail next to (or directly above) the item.label text in each catalog item card when the label matches one of the predefined labels; if the label does not match a predefined label, show the existing label text without a thumbnail.",
+      "reqIds": [
+        "REQ-34"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-the-user-uploaded-logo-image-uploaded-file-name-cash-counter-logo-png-to-the-home-page-header-so-it-is-visible-at-the-top-of-the-public-viewer-without-requiring-any-user-interaction",
+      "title": "Add the user-uploaded logo image (uploaded file name: \"cash counter  logo.png\") to the Home page header so it is visible at the top of the Public Viewer without requiring any user interaction.",
+      "reqIds": [
+        "REQ-35"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-header-logo-is-responsive-and-does-not-break-the-existing-header-layout-keep-the-current-title-subtitle-readable-constrain-the-logo-to-an-appropriate-max-height-and-prevent-the-logo-from-being-draggable-right-click-saved-where-feasible-consistent-with-existing-best-effort-content-protection-patterns",
+      "title": "Ensure the header logo is responsive and does not break the existing header layout: keep the current title/subtitle readable, constrain the logo to an appropriate max height, and prevent the logo from being draggable/right-click-saved where feasible (consistent with existing best-effort content protection patterns).",
+      "reqIds": [
+        "REQ-36"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-the-uploaded-image-file-maspar-logo-png-as-a-static-frontend-asset-and-display-it-as-the-header-logo-on-the-home-page-public-viewer-in-place-of-the-current-logo-image",
+      "title": "Add the uploaded image file \"Maspar  logo.png\" as a static frontend asset and display it as the header logo on the Home page (Public Viewer) in place of the current logo image.",
+      "reqIds": [
+        "REQ-37"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-maspar-header-logo-remains-responsive-and-protected-using-the-existing-best-effort-content-protection-behaviors-not-draggable-context-menu-disabled-without-breaking-the-header-layout-title-subtitle-remain-readable-on-mobile-and-desktop",
+      "title": "Ensure the Maspar header logo remains responsive and protected using the existing best-effort content-protection behaviors (not draggable, context-menu disabled) without breaking the header layout (title/subtitle remain readable on mobile and desktop).",
+      "reqIds": [
+        "REQ-38"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-the-collection-selection-control-from-the-admin-upload-form-so-admins-no-longer-see-or-interact-with-any-collection-field-on-the-admin-page",
+      "title": "Remove the Collection selection/control from the Admin Upload form so admins no longer see or interact with any Collection field on the Admin page.",
+      "reqIds": [
+        "REQ-39"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-admin-catalog-table-to-remove-the-collection-column-so-the-admin-page-no-longer-shows-collection-values-for-existing-catalog-items",
+      "title": "Update the Admin Catalog table to remove the Collection column so the Admin page no longer shows collection values for existing catalog items.",
+      "reqIds": [
+        "REQ-40"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-any-admin-ui-text-that-references-collection-so-the-admin-page-remains-clear-and-english-only-after-removing-the-collection-panel",
+      "title": "Update any Admin UI text that references \"Collection\" so the Admin page remains clear and English-only after removing the Collection panel.",
+      "reqIds": [
+        "REQ-41"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-the-user-facing-collection-field-from-the-admin-upload-form-so-admin-users-cannot-see-or-change-any-collection-value-when-creating-a-catalog-item",
+      "title": "Remove the user-facing \"Collection\" field from the Admin upload form so Admin users cannot see or change any collection value when creating a catalog item.",
+      "reqIds": [
+        "REQ-42"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-the-collection-column-from-the-admin-catalog-table-so-existing-items-no-longer-display-collection-values-on-the-admin-page",
+      "title": "Remove the \"Collection\" column from the Admin catalog table so existing items no longer display collection values on the Admin page.",
+      "reqIds": [
+        "REQ-43"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-admin-user-facing-text-so-the-admin-area-contains-no-visible-collection-wording-after-removing-the-collection-ui",
+      "title": "Update Admin user-facing text so the Admin area contains no visible \"Collection\" wording after removing the Collection UI.",
+      "reqIds": [
+        "REQ-44"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -238,6 +442,78 @@
       "reqIds": [
         "REQ-18"
       ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-21",
+      "summary": "Add sales-team login for user-side access (replace prior no-login public viewer)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-22",
+      "summary": "Replace terminology: change “Collection” to “Label” throughout the UI and item metadata display",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-23",
+      "summary": "Add item Description field and support editing it in Admin (along with title/label/file replacement)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-24",
+      "summary": "Admin catalog management enhancements: delete or hide items and reorder catalog display order",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-25",
+      "summary": "Update UI layout to corporate clean modern style: white background, soft-shadow cards, sidebar navigation (Dashboard, Labels, Catalogs, Media, Admin Settings)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-26",
+      "summary": "Update UI button text: replace “Collection” button with “Predefined Label” (predefined labels selector)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-27",
+      "summary": "Update navigation/UI: remove the current panel the user referenced and add a dedicated \"Label\" tab",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-28",
+      "summary": "Remove the following sections/items from the UI/content list: \"Colorart Showcase\", \"Bedding Essentials\", \"Cushion Designs\"",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-29",
+      "summary": "Remove the Blaize collection/catalog from the available catalog/collection list and UI views",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-30",
+      "summary": "Add a thumbnail image for each Label (\"Label Thumbnail\") and display it in the Labels UI",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-31",
+      "summary": "Add Maspar logo on the home page (portal landing/dashboard)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-32",
+      "summary": "Remove the Collection panel/section from the Admin page (\"madmin\"), so it no longer appears in the admin UI",
+      "reqIds": [],
       "status": "pending"
     }
   ],

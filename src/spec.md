@@ -1,12 +1,12 @@
 # Specification
 
 ## Summary
-**Goal:** Fix the portal theme so the new brand orange (#FAA831) and a grey-dominant (“70% grey”) glassmorphism look apply consistently across the frontend, replacing any remaining old orange (#F15A22).
+**Goal:** Remove all user-facing “Collection” UI and wording from the Admin page while keeping catalog item creation working via an internal default collection value.
 
 **Planned changes:**
-- Update global theme tokens and CSS variables (including header gradient and primary accents) to use #FAA831 and remove remaining references to #F15A22.
-- Update Tailwind theme configuration so `maspar.orange` maps to #FAA831 and any related orange-tinted glow/shadow values align with the new orange accent.
-- Audit key UI areas (Header, Tabs, Collection cards, Search/Filters panel, Item grid cards, Media viewer modal) to remove hardcoded primary hex colors and ensure components rely on theme tokens for consistent grey surfaces + orange accents.
-- Ensure grey-neutral surfaces and text contrast remain readable in both light and dark modes with the updated glassmorphism styling.
+- Remove the “Collection” field (label/control) from the Admin upload form so Admin users cannot view or change collection when creating catalog items.
+- Ensure form submission still creates a valid catalog item by applying a safe default collection value internally (not shown in the UI).
+- Remove the “Collection” column from the Admin catalog table (header and row cells) while keeping the table usable and Actions working.
+- Update any remaining Admin-facing text to eliminate the word “Collection” and keep the Admin UI English-only and clear.
 
-**User-visible outcome:** On a fresh load, the portal displays a consistent grey-dominant glass theme with orange #FAA831 used only for emphasis (active states, rings, highlights), with no visible remnants of the old orange theme.
+**User-visible outcome:** Admin users can upload and manage catalog items without seeing any “Collection” field/column/text, and uploads continue to succeed normally.

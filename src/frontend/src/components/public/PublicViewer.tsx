@@ -1,50 +1,46 @@
 import { useState, useEffect, useMemo } from 'react';
-import type { CatalogItem, LabelLanguage } from '../../lib/catalogTypes';
-import { getLabelLanguage } from '../../lib/labelLanguage';
-import { getCollections } from '../../lib/collections';
-import { loadBanner, type BannerData } from '../../lib/bannerStorage';
+import type { CatalogItem } from '../../lib/catalogTypes';
+import { loadBanner, subscribeToBannerChanges, type BannerData } from '../../lib/bannerStorage';
 import { UI_TEXT } from '../../lib/uiText';
 import { SearchAndFilters } from './SearchAndFilters';
-import { CollectionCards } from './CollectionCards';
 import { ItemGrid } from './ItemGrid';
 import { MediaViewerModal } from '../viewers/MediaViewerModal';
 
 interface PublicViewerProps {
   items: CatalogItem[];
+  refreshTrigger?: number;
 }
 
-export function PublicViewer({ items }: PublicViewerProps) {
+export function PublicViewer({ items, refreshTrigger }: PublicViewerProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCollection, setSelectedCollection] = useState('all');
-  const [language, setLanguage] = useState<LabelLanguage>('en');
+  const [selectedLabel, setSelectedLabel] = useState('all');
   const [selectedItem, setSelectedItem] = useState<CatalogItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [banner, setBanner] = useState<BannerData | null>(null);
 
+  // Load banner on mount and when refreshTrigger changes
   useEffect(() => {
-    setLanguage(getLabelLanguage());
     setBanner(loadBanner());
-  }, []);
+  }, [refreshTrigger]);
 
-  const collections = useMemo(() => getCollections(items), [items]);
-
-  const itemCounts = useMemo(() => {
-    const counts: Record<string, number> = {};
-    collections.forEach(col => {
-      counts[col.id] = items.filter(item => item.collection === col.id).length;
+  // Subscribe to banner changes (both in-app and cross-tab)
+  useEffect(() => {
+    const unsubscribe = subscribeToBannerChanges((newBanner) => {
+      setBanner(newBanner);
     });
-    return counts;
-  }, [items, collections]);
+
+    return unsubscribe;
+  }, []);
 
   const filteredItems = useMemo(() => {
     return items.filter(item => {
-      const matchesCollection = selectedCollection === 'all' || item.collection === selectedCollection;
+      const matchesLabel = selectedLabel === 'all' || item.label === selectedLabel;
       const matchesSearch = searchQuery === '' || 
-        item.label[language].toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.title.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesCollection && matchesSearch;
+      return matchesLabel && matchesSearch;
     });
-  }, [items, selectedCollection, searchQuery, language]);
+  }, [items, selectedLabel, searchQuery]);
 
   const handleItemClick = (item: CatalogItem) => {
     setSelectedItem(item);
@@ -73,18 +69,8 @@ export function PublicViewer({ items }: PublicViewerProps) {
       <SearchAndFilters
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
-        selectedCollection={selectedCollection}
-        onCollectionChange={setSelectedCollection}
-        collections={collections}
-        language={language}
-        onLanguageChange={setLanguage}
-      />
-
-      <CollectionCards
-        collections={collections}
-        selectedCollection={selectedCollection}
-        onSelectCollection={setSelectedCollection}
-        itemCounts={itemCounts}
+        selectedLabel={selectedLabel}
+        onLabelChange={setSelectedLabel}
       />
 
       {filteredItems.length === 0 ? (
@@ -94,7 +80,6 @@ export function PublicViewer({ items }: PublicViewerProps) {
       ) : (
         <ItemGrid
           items={filteredItems}
-          language={language}
           onItemClick={handleItemClick}
         />
       )}

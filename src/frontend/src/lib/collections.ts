@@ -1,5 +1,4 @@
 export const DEFAULT_COLLECTIONS = [
-  { id: 'blaize', name: 'Blaize', icon: '✨' },
   { id: 'colorart', name: 'Colorart', icon: '🎨' },
   { id: 'bedding', name: 'Bedding', icon: '🛏️' },
   { id: 'cushions', name: 'Cushions', icon: '🛋️' }

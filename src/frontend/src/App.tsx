@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { MasparLayout } from './components/layout/MasparLayout';
 import { AdminGate } from './components/admin/AdminGate';
 import { AdminArea } from './components/admin/AdminArea';
@@ -9,11 +10,13 @@ import { Eye, Shield } from 'lucide-react';
 
 function App() {
   const { items, isLoading, addItem, removeItem } = useCatalog();
+  const [activeTab, setActiveTab] = useState('public');
+  const [publicViewerRefresh, setPublicViewerRefresh] = useState(0);
 
   const handleAddItem = (itemData: {
     title: string;
     collection: string;
-    label: { en: string; hi: string };
+    label: string;
     mediaType: 'pdf' | 'video' | 'image';
     mediaSource: string;
   }) => {
@@ -23,6 +26,14 @@ function App() {
       createdAt: Date.now()
     };
     addItem(newItem);
+  };
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    // When switching back to public viewer, trigger a refresh to check banner state
+    if (value === 'public') {
+      setPublicViewerRefresh(prev => prev + 1);
+    }
   };
 
   if (isLoading) {
@@ -40,7 +51,7 @@ function App() {
 
   return (
     <MasparLayout>
-      <Tabs defaultValue="public" className="w-full">
+      <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
         <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 glass-strong mb-6">
           <TabsTrigger value="public" className="gap-2">
             <Eye className="w-4 h-4" />
@@ -53,7 +64,7 @@ function App() {
         </TabsList>
 
         <TabsContent value="public">
-          <PublicViewer items={items} />
+          <PublicViewer items={items} refreshTrigger={publicViewerRefresh} />
         </TabsContent>
 
         <TabsContent value="admin">

@@ -18,16 +18,26 @@ export function MasparLayout({ children }: MasparLayoutProps) {
       {/* Header */}
       <header className="maspar-gradient text-white shadow-lg sticky top-0 z-40">
         <div className="container mx-auto px-4 py-4 md:py-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
-                {UI_TEXT.header.title}
-              </h1>
-              <p className="text-sm md:text-base text-white/90 mt-1">
-                {UI_TEXT.header.subtitle}
-              </p>
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4 md:gap-6 flex-1 min-w-0">
+              <img 
+                src="/assets/Maspar  logo.png" 
+                alt="Maspar Logo" 
+                className="h-12 md:h-16 w-auto object-contain flex-shrink-0 no-select no-drag"
+                draggable="false"
+                onContextMenu={(e) => e.preventDefault()}
+                onDragStart={(e) => e.preventDefault()}
+              />
+              <div className="min-w-0">
+                <h1 className="text-xl md:text-3xl font-bold tracking-tight truncate">
+                  {UI_TEXT.header.title}
+                </h1>
+                <p className="text-xs md:text-base text-white/90 mt-1 truncate">
+                  {UI_TEXT.header.subtitle}
+                </p>
+              </div>
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-3 flex-shrink-0">
               <a href="#" className="text-white/80 hover:text-white transition-colors">
                 <SiFacebook size={20} />
               </a>

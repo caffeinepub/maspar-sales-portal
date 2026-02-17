@@ -18,10 +18,8 @@ export const UI_TEXT = {
     uploadTitle: 'Upload New Item',
     catalogTitle: 'Manage Catalog',
     formTitle: 'Title',
-    formCollection: 'Collection',
     formPredefinedLabel: 'Predefined Label',
-    formLabelEn: 'Label (English)',
-    formLabelHi: 'Label (Hindi)',
+    formLabel: 'Label',
     formMediaType: 'Media Type',
     formMediaSource: 'Media Source URL',
     formPreview: 'Preview',
@@ -31,9 +29,8 @@ export const UI_TEXT = {
   },
   public: {
     searchPlaceholder: 'Search items...',
-    filterCollection: 'Filter by Collection',
-    allCollections: 'All Collections',
-    languageToggle: 'Language',
+    filterLabel: 'Filter by Predefined Label',
+    allLabels: 'All Labels',
     noItems: 'No items found',
     selectCollection: 'Select a collection to view items'
   },

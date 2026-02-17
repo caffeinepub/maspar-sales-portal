@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { loadBanner, saveBanner, clearBanner, type BannerData } from '../../lib/bannerStorage';
+import { loadBanner, saveBanner, clearBanner, subscribeToBannerChanges, type BannerData } from '../../lib/bannerStorage';
 import { Button } from '../ui/button';
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
@@ -9,6 +9,10 @@ import { Upload, X, Image as ImageIcon } from 'lucide-react';
 const REQUIRED_WIDTH = 1280;
 const REQUIRED_HEIGHT = 720;
 
+// TODO: User request contained incomplete fragment "and remove the" - 
+// Unable to determine what specific UI element or text should be removed.
+// If clarification is needed, please specify what should be removed and from which component.
+
 export function AdminBannerManager() {
   const [banner, setBanner] = useState<BannerData | null>(null);
   const [error, setError] = useState<string>('');
@@ -17,6 +21,15 @@ export function AdminBannerManager() {
 
   useEffect(() => {
     setBanner(loadBanner());
+  }, []);
+
+  // Subscribe to banner changes for real-time updates
+  useEffect(() => {
+    const unsubscribe = subscribeToBannerChanges((newBanner) => {
+      setBanner(newBanner);
+    });
+
+    return unsubscribe;
   }, []);
 
   const validateAndUploadImage = (file: File) => {
@@ -47,7 +60,6 @@ export function AdminBannerManager() {
 
         try {
           saveBanner(newBanner);
-          setBanner(newBanner);
           setSuccess('Banner uploaded successfully!');
           setIsUploading(false);
         } catch (err) {
@@ -84,7 +96,6 @@ export function AdminBannerManager() {
 
   const handleRemoveBanner = () => {
     clearBanner();
-    setBanner(null);
     setSuccess('Banner removed successfully.');
     setError('');
   };

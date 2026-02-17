@@ -1,42 +1,29 @@
-import { useState, useEffect } from 'react';
-import type { LabelLanguage } from '../../lib/catalogTypes';
-import { getLabelLanguage, setLabelLanguage } from '../../lib/labelLanguage';
 import { UI_TEXT } from '../../lib/uiText';
+import { PREDEFINED_LABELS } from '../../lib/predefinedLabels';
+import { getLabelThumbnail } from '../../lib/labelThumbnails';
 import { Input } from '../ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
-import { Switch } from '../ui/switch';
-import { Label } from '../ui/label';
 import { Search } from 'lucide-react';
 
 interface SearchAndFiltersProps {
   searchQuery: string;
   onSearchChange: (query: string) => void;
-  selectedCollection: string;
-  onCollectionChange: (collection: string) => void;
-  collections: Array<{ id: string; name: string }>;
-  language: LabelLanguage;
-  onLanguageChange: (lang: LabelLanguage) => void;
+  selectedLabel: string;
+  onLabelChange: (label: string) => void;
 }
 
 export function SearchAndFilters({
   searchQuery,
   onSearchChange,
-  selectedCollection,
-  onCollectionChange,
-  collections,
-  language,
-  onLanguageChange
+  selectedLabel,
+  onLabelChange
 }: SearchAndFiltersProps) {
-  const handleLanguageToggle = (checked: boolean) => {
-    const newLang: LabelLanguage = checked ? 'hi' : 'en';
-    onLanguageChange(newLang);
-    setLabelLanguage(newLang);
-  };
+  const selectedThumbnail = selectedLabel !== 'all' ? getLabelThumbnail(selectedLabel) : undefined;
 
   return (
-    <div className="glass-strong rounded-lg p-4 space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="relative md:col-span-2">
+    <div className="glass-strong rounded-lg p-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             type="text"
@@ -47,38 +34,48 @@ export function SearchAndFilters({
           />
         </div>
         
-        <Select value={selectedCollection} onValueChange={onCollectionChange}>
+        <Select value={selectedLabel} onValueChange={onLabelChange}>
           <SelectTrigger>
-            <SelectValue placeholder={UI_TEXT.public.filterCollection} />
+            <SelectValue>
+              {selectedLabel === 'all' ? (
+                UI_TEXT.public.allLabels
+              ) : (
+                <div className="flex items-center gap-2">
+                  {selectedThumbnail && (
+                    <img
+                      src={selectedThumbnail}
+                      alt={selectedLabel}
+                      className="w-6 h-6 rounded object-cover no-drag"
+                      draggable={false}
+                    />
+                  )}
+                  <span>{selectedLabel}</span>
+                </div>
+              )}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">{UI_TEXT.public.allCollections}</SelectItem>
-            {collections.map((col) => (
-              <SelectItem key={col.id} value={col.id}>
-                {col.name}
-              </SelectItem>
-            ))}
+            <SelectItem value="all">{UI_TEXT.public.allLabels}</SelectItem>
+            {PREDEFINED_LABELS.map((label) => {
+              const thumbnail = getLabelThumbnail(label);
+              return (
+                <SelectItem key={label} value={label}>
+                  <div className="flex items-center gap-2">
+                    {thumbnail && (
+                      <img
+                        src={thumbnail}
+                        alt={label}
+                        className="w-6 h-6 rounded object-cover no-drag"
+                        draggable={false}
+                      />
+                    )}
+                    <span>{label}</span>
+                  </div>
+                </SelectItem>
+              );
+            })}
           </SelectContent>
         </Select>
-      </div>
-
-      <div className="flex items-center gap-3">
-        <Label htmlFor="language-toggle" className="text-sm">
-          {UI_TEXT.public.languageToggle}:
-        </Label>
-        <div className="flex items-center gap-2">
-          <span className={`text-sm ${language === 'en' ? 'font-semibold text-foreground' : 'text-muted-foreground'}`}>
-            EN
-          </span>
-          <Switch
-            id="language-toggle"
-            checked={language === 'hi'}
-            onCheckedChange={handleLanguageToggle}
-          />
-          <span className={`text-sm ${language === 'hi' ? 'font-semibold text-foreground' : 'text-muted-foreground'}`}>
-            HI
-          </span>
-        </div>
       </div>
     </div>
   );

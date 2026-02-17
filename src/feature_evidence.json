@@ -2,11 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-update-the-global-theme-tokens-so-the-app-primary-brand-color-is-orange-faa831-replacing-any-remaining-f15a22-and-the-overall-look-is-a-grey-dominant-70-grey-glassmorphism-theme-while-keeping-orange-as-the-accent-for-key-ui-emphasis-rings-active-states-highlights",
-      "featureTitle": "Update the global theme tokens so the app primary brand color is Orange #FAA831 (replacing any remaining #F15A22) and the overall look is a grey-dominant (\"70% grey\") glassmorphism theme, while keeping orange as the accent for key UI emphasis (rings, active states, highlights).",
+      "featureId": "feature-remove-the-user-facing-collection-field-from-the-admin-upload-form-so-admin-users-cannot-see-or-change-any-collection-value-when-creating-a-catalog-item",
+      "featureTitle": "Remove the user-facing \"Collection\" field from the Admin upload form so Admin users cannot see or change any collection value when creating a catalog item.",
       "files": [
-        "frontend/src/index.css",
-        "frontend/tailwind.config.js"
+        "frontend/src/components/admin/AdminUploadForm.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -16,16 +15,15 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-17"
+        "REQ-42"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-ensure-the-updated-theme-changes-are-actually-reflected-in-the-deployed-build-by-removing-avoiding-hardcoded-color-values-in-component-classnames-where-they-override-theme-tokens-and-by-relying-on-the-css-variables-theme-tokens-for-all-primary-secondary-accent-styling",
-      "featureTitle": "Ensure the updated theme changes are actually reflected in the deployed build by removing/avoiding hardcoded color values in component classNames where they override theme tokens, and by relying on the CSS variables/theme tokens for all primary/secondary/accent styling.",
+      "featureId": "feature-remove-the-collection-column-from-the-admin-catalog-table-so-existing-items-no-longer-display-collection-values-on-the-admin-page",
+      "featureTitle": "Remove the \"Collection\" column from the Admin catalog table so existing items no longer display collection values on the Admin page.",
       "files": [
-        "frontend/src/index.css",
-        "frontend/tailwind.config.js"
+        "frontend/src/components/admin/AdminCatalogManager.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -35,7 +33,26 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-19"
+        "REQ-43"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-admin-user-facing-text-so-the-admin-area-contains-no-visible-collection-wording-after-removing-the-collection-ui",
+      "featureTitle": "Update Admin user-facing text so the Admin area contains no visible \"Collection\" wording after removing the Collection UI.",
+      "files": [
+        "frontend/src/components/admin/AdminCatalogManager.tsx",
+        "frontend/src/lib/uiText.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-44"
       ],
       "confidence": "high"
     }
