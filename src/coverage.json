@@ -1,0 +1,53 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-17T05:16:19.228Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 2,
+    "implemented": 2,
+    "items": [
+      {
+        "id": "REQ-10",
+        "summary": "Create a predefined label list based on the uploaded image and make it available to the frontend as a single source of truth. The label list must include: Colorart, Vintage, Hermosa, Rurban, Essentials, Eternal Treasure, Hues, Inhouse, Cotsmere, Little Maspar, Generic, Maspar.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/lib/predefinedLabels.ts"
+        ],
+        "matchedFiles": [
+          "frontend/src/lib/predefinedLabels.ts"
+        ]
+      },
+      {
+        "id": "REQ-11",
+        "summary": "Update the Admin Upload form so admins can select from the predefined labels instead of typing label text manually. Keep bilingual label support: selecting a predefined label should populate the English label field, and the Hindi label field must remain editable so admins can enter/override Hindi when needed.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/admin/AdminUploadForm.tsx",
+          "frontend/src/lib/uiText.ts"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/admin/AdminUploadForm.tsx",
+          "frontend/src/lib/uiText.ts"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "build-request.json",
+    "build-template/README.md",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/src/components/admin/AdminUploadForm.tsx",
+    "frontend/src/lib/predefinedLabels.ts",
+    "frontend/src/lib/uiText.ts",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

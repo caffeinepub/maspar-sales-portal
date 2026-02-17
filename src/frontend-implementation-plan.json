@@ -1,0 +1,45 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Add predefined labels module and dropdown selection in Admin upload",
+  "requirements": [
+    {
+      "id": "REQ-10",
+      "summary": "Add a single-source predefined label set module for admin/public UI usage.",
+      "acceptanceCriteria": [
+        "A dedicated module (e.g., in frontend/src/lib) exports the label set as an array (or similar) that can be imported by UI components.",
+        "The exported label set includes exactly the 12 labels shown in the uploaded image: Colorart, Vintage, Hermosa, Rurban, Essentials, Eternal Treasure, Hues, Inhouse, Cotsmere, Little Maspar, Generic, Maspar.",
+        "No user-facing UI text is introduced in Hindi; user-facing UI text remains English."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/lib/predefinedLabels.ts",
+          "operation": "create",
+          "description": "Create a dedicated frontend lib module exporting the predefined label set (exactly the 12 required labels) as an immutable array and (optionally) a helper for validation/normalization to act as the single source of truth."
+        }
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "summary": "Replace manual label typing with a predefined-label dropdown in AdminUploadForm while keeping Hindi editable.",
+      "acceptanceCriteria": [
+        "AdminUploadForm provides a label selection control (dropdown/combobox) that lists the predefined labels.",
+        "When a predefined label is selected, the English label input is automatically set to that label value.",
+        "The Hindi label input remains present and editable after selecting a predefined label.",
+        "Existing add-item flow still works: added items persist to localStorage and appear in the Admin catalog manager and Public Viewer without regressions."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/admin/AdminUploadForm.tsx",
+          "operation": "modify",
+          "description": "Import the predefined labels from frontend/src/lib/predefinedLabels and add a label selection control using existing shadcn/ui Select components (compose as-is; do not edit files under frontend/src/components/ui). Selecting an option should set the English label state to the selected label while keeping the English input present (and optionally still editable) and leaving the Hindi input editable. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/lib/uiText.ts",
+          "operation": "modify",
+          "description": "Add/adjust English-only admin form copy needed for the new predefined label selector (e.g., a field label like \"Predefined Label\") ensuring no Hindi user-facing UI text is introduced."
+        }
+      ]
+    }
+  ]
+}

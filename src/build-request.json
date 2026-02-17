@@ -1,0 +1,59 @@
+{
+  "kind": "build_request",
+  "title": "Add predefined label set and dropdown selection in Admin upload",
+  "projectName": "Maspar Sales Portal",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-10",
+      "text": "Create a predefined label list based on the uploaded image and make it available to the frontend as a single source of truth. The label list must include: Colorart, Vintage, Hermosa, Rurban, Essentials, Eternal Treasure, Hues, Inhouse, Cotsmere, Little Maspar, Generic, Maspar.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-3"
+        ],
+        "quotes": [
+          "ye labels bana do fir admine labels ke acroding colestin dal dega"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A dedicated module (e.g., in frontend/src/lib) exports the label set as an array (or similar) that can be imported by UI components.",
+        "The exported label set includes exactly the 12 labels shown in the uploaded image: Colorart, Vintage, Hermosa, Rurban, Essentials, Eternal Treasure, Hues, Inhouse, Cotsmere, Little Maspar, Generic, Maspar.",
+        "No user-facing UI text is introduced in Hindi; user-facing UI text remains English."
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "text": "Update the Admin Upload form so admins can select from the predefined labels instead of typing label text manually. Keep bilingual label support: selecting a predefined label should populate the English label field, and the Hindi label field must remain editable so admins can enter/override Hindi when needed.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-3"
+        ],
+        "quotes": [
+          "ye labels bana do fir admine labels ke acroding colestin dal dega"
+        ]
+      },
+      "acceptanceCriteria": [
+        "AdminUploadForm provides a label selection control (dropdown/combobox) that lists the predefined labels.",
+        "When a predefined label is selected, the English label input is automatically set to that label value.",
+        "The Hindi label input remains present and editable after selecting a predefined label.",
+        "Existing add-item flow still works: added items persist to localStorage and appear in the Admin catalog manager and Public Viewer without regressions."
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not edit files under frontend/src/components/ui (shadcn components); compose them as-is.",
+    "Do not change authentication approach (AdminGate remains the fixed credential check).",
+    "Do not add backend persistence; continue using localStorage for catalog storage."
+  ],
+  "nonGoals": [
+    "Do not implement a new backend canister API for labels or catalog items.",
+    "Do not implement automatic translation from English labels to Hindi labels.",
+    "Do not change the existing collection system beyond what is necessary to let admins assign collections as they do today."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

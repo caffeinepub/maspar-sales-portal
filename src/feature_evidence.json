@@ -1,0 +1,42 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-create-a-predefined-label-list-based-on-the-uploaded-image-and-make-it-available-to-the-frontend-as-a-single-source-of-truth-the-label-list-must-include-colorart-vintage-hermosa-rurban-essentials-eternal-treasure-hues-inhouse-cotsmere-little-maspar-generic-maspar",
+      "featureTitle": "Create a predefined label list based on the uploaded image and make it available to the frontend as a single source of truth. The label list must include: Colorart, Vintage, Hermosa, Rurban, Essentials, Eternal Treasure, Hues, Inhouse, Cotsmere, Little Maspar, Generic, Maspar.",
+      "files": [
+        "frontend/src/lib/predefinedLabels.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-10"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-the-admin-upload-form-so-admins-can-select-from-the-predefined-labels-instead-of-typing-label-text-manually-keep-bilingual-label-support-selecting-a-predefined-label-should-populate-the-english-label-field-and-the-hindi-label-field-must-remain-editable-so-admins-can-enter-override-hindi-when-needed",
+      "featureTitle": "Update the Admin Upload form so admins can select from the predefined labels instead of typing label text manually. Keep bilingual label support: selecting a predefined label should populate the English label field, and the Hindi label field must remain editable so admins can enter/override Hindi when needed.",
+      "files": [
+        "frontend/src/components/admin/AdminUploadForm.tsx",
+        "frontend/src/lib/uiText.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-11"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

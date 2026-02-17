@@ -1,0 +1,162 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 5,
+  "summary": "Premium, mobile-responsive Maspar sales team portal (HTML/CSS/JS, CodePen-ready) with public viewer + admin upload, glassmorphism UI in brand colors, localStorage-based catalog management, and protected viewing for PDFs/videos/images.",
+  "architectural_notes": [
+    "Pure HTML/CSS/JS only; CDN libraries allowed (e.g., PDF.js); must run directly on CodePen.",
+    "No server backend; persist catalogs/metadata via LocalStorage.",
+    "Content protection is best-effort (disable right-click/drag; no-download UX), not true DRM."
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-create-a-mobile-responsive-portal-ui-with-a-premium-glassmorphism-look-using-maspar-brand-colors-orange-f15a22-grey-4a4a4a-white-including-a-header-with-an-orange-gradient-minimal-layout-and-smooth-hover-lift-transition-animations",
+      "title": "Create a mobile-responsive portal UI with a premium glassmorphism look using Maspar brand colors (Orange #F15A22, Grey #4A4A4A, White), including a header with an orange gradient, minimal layout, and smooth hover/lift + transition animations.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-two-area-navigation-model-1-a-public-viewer-area-that-requires-no-login-for-sales-executives-and-2-an-admin-area-protected-by-a-simple-credential-check-using-username-admin-and-password-maspar2026",
+      "title": "Implement a two-area navigation model: (1) a Public Viewer area that requires no login for sales executives, and (2) an Admin area protected by a simple credential check using username `admin` and password `maspar2026`.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-provide-an-admin-upload-section-that-allows-adding-catalog-items-pdfs-videos-images-with-an-in-form-preview-and-saving-all-item-metadata-title-bilingual-labels-collection-media-type-and-the-media-source-reference-into-localstorage-no-server-persistence",
+      "title": "Provide an Admin Upload section that allows adding catalog items (PDFs, videos, images) with an in-form preview, and saving all item metadata (title, bilingual labels, collection, media type, and the media source reference) into LocalStorage (no server persistence).",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-display-catalog-content-in-the-public-viewer-as-collection-wise-glass-cards-e-g-blaize-colorart-bedding-cushions-and-allow-browsing-by-selecting-a-collection-to-see-its-items",
+      "title": "Display catalog content in the Public Viewer as collection-wise glass cards (e.g., Blaize, Colorart, Bedding, Cushions) and allow browsing by selecting a collection to see its items.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-search-and-filtering-in-the-public-viewer-by-collection-and-by-label-supporting-bilingual-labels-english-hindi-with-a-ui-language-toggle-for-labels",
+      "title": "Implement search and filtering in the Public Viewer by collection and by label, supporting bilingual labels (English/Hindi) with a UI language toggle for labels.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-modal-popup-viewers-with-a-clear-close-button-for-each-media-type-pdf-render-first-page-video-in-page-player-and-image-zoom-only-viewing",
+      "title": "Add modal popup viewers (with a clear close button) for each media type: PDF (render first page), video (in-page player), and image (zoom-only viewing).",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-best-effort-content-protection-behaviors-in-the-public-viewer-and-modal-viewers-by-disabling-right-click-context-menu-drag-to-save-on-images-and-obvious-download-affordances-while-keeping-the-ui-smooth-and-lightweight",
+      "title": "Apply best-effort content protection behaviors in the Public Viewer and modal viewers by disabling right-click/context menu, drag-to-save on images, and obvious download affordances, while keeping the UI smooth and lightweight.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-use-clear-english-user-facing-ui-text-throughout-the-app-navigation-buttons-helper-text-while-still-supporting-bilingual-english-hindi-item-labels",
+      "title": "Use clear English user-facing UI text throughout the app (navigation, buttons, helper text), while still supporting bilingual (English/Hindi) item labels.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-provide-a-simple-initial-dataset-seed-stored-to-localstorage-on-first-run-if-empty-demonstrating-at-least-one-item-in-each-of-the-collections-blaize-colorart-bedding-and-cushions-so-the-public-viewer-is-not-empty-on-first-open",
+      "title": "Provide a simple initial dataset (seed) stored to LocalStorage on first run (if empty) demonstrating at least one item in each of the collections Blaize, Colorart, Bedding, and Cushions, so the Public Viewer is not empty on first open.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-predefined-label-list-based-on-the-uploaded-image-and-make-it-available-to-the-frontend-as-a-single-source-of-truth-the-label-list-must-include-colorart-vintage-hermosa-rurban-essentials-eternal-treasure-hues-inhouse-cotsmere-little-maspar-generic-maspar",
+      "title": "Create a predefined label list based on the uploaded image and make it available to the frontend as a single source of truth. The label list must include: Colorart, Vintage, Hermosa, Rurban, Essentials, Eternal Treasure, Hues, Inhouse, Cotsmere, Little Maspar, Generic, Maspar.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-admin-upload-form-so-admins-can-select-from-the-predefined-labels-instead-of-typing-label-text-manually-keep-bilingual-label-support-selecting-a-predefined-label-should-populate-the-english-label-field-and-the-hindi-label-field-must-remain-editable-so-admins-can-enter-override-hindi-when-needed",
+      "title": "Update the Admin Upload form so admins can select from the predefined labels instead of typing label text manually. Keep bilingual label support: selecting a predefined label should populate the English label field, and the Hindi label field must remain editable so admins can enter/override Hindi when needed.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Build premium Maspar sales portal UI (glassmorphism, minimal, brand colors, header gradient, hover/transition animations)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Admin login (admin/maspar2026) with admin-only upload section and file preview",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Public viewer tab for sales team (no login) to browse catalogs, videos, and images",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Collection-wise organization and cards (e.g., Blaize, Colorart, Bedding, Cushions) with modal popup viewers",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Protected media viewing: PDF first-page viewer (PDF.js), video no-download player, image zoom-only; disable right-click/drag",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Search/filter by label/collection and bilingual (Hindi/English) labels",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Persist uploaded content and metadata in LocalStorage (no server)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Mobile responsive layout optimized for field sales phone usage",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Provide predefined label set and let Admin assign/select collections based on labels (label-driven collection organization)",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "Maspar Sales Portal",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

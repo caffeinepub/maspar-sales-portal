@@ -1,0 +1,24 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-17T05:16:19.226Z",
+  "summary": "REQ-10 and REQ-11 appear implemented: a dedicated predefined-labels module is added exporting exactly the 12 required labels, and AdminUploadForm is updated to include a dropdown listing these labels that auto-populates the English label field while keeping the Hindi label input present/editable (as far as can be seen in the truncated diff). No evidence of Hindi UI strings being introduced.",
+  "missing_requirements": [],
+  "hallucinated_features": [
+    {
+      "description": "Added helper type guard `isPredefinedLabel` (and `PredefinedLabel` type) beyond the requirement to export the predefined label set.",
+      "reason": "REQ-10 only requires exporting the label set as an array (single source of truth). The additional runtime/type utilities were not requested.",
+      "evidence": [
+        "frontend/src/lib/predefinedLabels.ts"
+      ]
+    }
+  ],
+  "confidence": 0.82,
+  "changed_files": [
+    "frontend-file-summaries.txt",
+    "frontend/src/components/admin/AdminUploadForm.tsx",
+    "frontend/src/lib/predefinedLabels.ts",
+    "frontend/src/lib/uiText.ts",
+    "project_state.json"
+  ]
+}
