@@ -2,10 +2,12 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-remove-the-user-facing-collection-field-from-the-admin-upload-form-so-admin-users-cannot-see-or-change-any-collection-value-when-creating-a-catalog-item",
-      "featureTitle": "Remove the user-facing \"Collection\" field from the Admin upload form so Admin users cannot see or change any collection value when creating a catalog item.",
+      "featureId": "feature-investigate-and-fix-the-issue-where-selecting-a-catalog-item-does-not-open-the-correct-media-viewer-image-video-pdf-in-the-public-viewer-and-ensure-the-modal-reliably-opens-and-stays-open-when-an-item-card-is-clicked",
+      "featureTitle": "Investigate and fix the issue where selecting a catalog item does not open the correct media viewer (Image/Video/PDF) in the Public Viewer, and ensure the modal reliably opens and stays open when an item card is clicked.",
       "files": [
-        "frontend/src/components/admin/AdminUploadForm.tsx"
+        "frontend/src/components/public/ItemGrid.tsx",
+        "frontend/src/components/public/PublicViewer.tsx",
+        "frontend/src/components/viewers/MediaViewerModal.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -15,15 +17,18 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-42"
+        "REQ-48"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-remove-the-collection-column-from-the-admin-catalog-table-so-existing-items-no-longer-display-collection-values-on-the-admin-page",
-      "featureTitle": "Remove the \"Collection\" column from the Admin catalog table so existing items no longer display collection values on the Admin page.",
+      "featureId": "feature-add-a-safe-client-side-compatibility-cleanup-migration-when-loading-catalog-items-from-localstorage-to-prevent-media-viewers-from-failing-due-to-invalid-or-legacy-mediatype-and-or-missing-mediasource-values-e-g-uppercase-values-like-pdf-unexpected-strings-or-empty-urls-normalize-known-variants-to-supported-values-image-video-pdf-and-handle-unknown-invalid-values-gracefully",
+      "featureTitle": "Add a safe client-side compatibility cleanup/migration when loading catalog items from LocalStorage to prevent media viewers from failing due to invalid or legacy `mediaType` and/or missing `mediaSource` values (e.g., uppercase values like \"PDF\", unexpected strings, or empty URLs). Normalize known variants to supported values ('image' | 'video' | 'pdf') and handle unknown/invalid values gracefully.",
       "files": [
-        "frontend/src/components/admin/AdminCatalogManager.tsx"
+        "frontend/src/components/public/ItemGrid.tsx",
+        "frontend/src/hooks/useCatalog.ts",
+        "frontend/src/lib/catalogStorage.ts",
+        "frontend/src/lib/catalogTypes.ts"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -33,26 +38,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-43"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-update-admin-user-facing-text-so-the-admin-area-contains-no-visible-collection-wording-after-removing-the-collection-ui",
-      "featureTitle": "Update Admin user-facing text so the Admin area contains no visible \"Collection\" wording after removing the Collection UI.",
-      "files": [
-        "frontend/src/components/admin/AdminCatalogManager.tsx",
-        "frontend/src/lib/uiText.ts"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-44"
+        "REQ-49"
       ],
       "confidence": "high"
     }

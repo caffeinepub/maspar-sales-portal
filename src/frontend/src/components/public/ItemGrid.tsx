@@ -19,7 +19,8 @@ export function ItemGrid({ items, onItemClick }: ItemGridProps) {
   }, []);
 
   const getMediaIcon = (type: string) => {
-    switch (type) {
+    const normalized = type.toLowerCase();
+    switch (normalized) {
       case 'pdf':
         return <FileText className="w-5 h-5" />;
       case 'video':
@@ -35,19 +36,23 @@ export function ItemGrid({ items, onItemClick }: ItemGridProps) {
     <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {items.map((item) => {
         const labelThumbnail = getLabelThumbnail(item.label);
+        const hasValidSource = item.mediaSource && item.mediaSource.trim().length > 0;
         
         return (
           <Card
             key={item.id}
             className="glass cursor-pointer transition-lift hover:shadow-glass no-select"
-            onClick={() => onItemClick(item)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onItemClick(item);
+            }}
           >
             <CardHeader>
               <div className="flex items-start justify-between gap-2">
                 <CardTitle className="text-lg">{item.title}</CardTitle>
                 <Badge variant="secondary" className="gap-1.5">
                   {getMediaIcon(item.mediaType)}
-                  {item.mediaType.toUpperCase()}
+                  {item.mediaType ? item.mediaType.toUpperCase() : 'UNKNOWN'}
                 </Badge>
               </div>
             </CardHeader>
@@ -65,7 +70,7 @@ export function ItemGrid({ items, onItemClick }: ItemGridProps) {
                   {item.label}
                 </p>
               </div>
-              {item.mediaType === 'image' && (
+              {item.mediaType.toLowerCase() === 'image' && hasValidSource && (
                 <div className="aspect-video rounded-lg overflow-hidden bg-muted">
                   <img
                     src={item.mediaSource}
@@ -75,14 +80,19 @@ export function ItemGrid({ items, onItemClick }: ItemGridProps) {
                   />
                 </div>
               )}
-              {item.mediaType === 'video' && (
+              {item.mediaType.toLowerCase() === 'video' && (
                 <div className="aspect-video rounded-lg overflow-hidden bg-muted flex items-center justify-center">
                   <Video className="w-12 h-12 text-muted-foreground" />
                 </div>
               )}
-              {item.mediaType === 'pdf' && (
+              {item.mediaType.toLowerCase() === 'pdf' && (
                 <div className="aspect-video rounded-lg overflow-hidden bg-muted flex items-center justify-center">
                   <FileText className="w-12 h-12 text-muted-foreground" />
+                </div>
+              )}
+              {!['image', 'video', 'pdf'].includes(item.mediaType.toLowerCase()) && (
+                <div className="aspect-video rounded-lg overflow-hidden bg-muted flex items-center justify-center">
+                  <p className="text-sm text-muted-foreground">Unknown media type</p>
                 </div>
               )}
             </CardContent>

@@ -44,7 +44,10 @@ export function PublicViewer({ items, refreshTrigger }: PublicViewerProps) {
 
   const handleItemClick = (item: CatalogItem) => {
     setSelectedItem(item);
-    setIsModalOpen(true);
+    // Defer modal opening to next tick to ensure state is set
+    setTimeout(() => {
+      setIsModalOpen(true);
+    }, 0);
   };
 
   const handleCloseModal = () => {

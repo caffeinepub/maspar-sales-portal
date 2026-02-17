@@ -1,69 +1,55 @@
 {
   "kind": "build_request",
-  "title": "Remove Collection UI from Admin page",
+  "title": "Fix media-type viewer not opening for catalog items",
   "projectName": "Maspar Sales Portal",
-  "priority": "normal",
+  "priority": "high",
   "requirements": [
     {
-      "id": "REQ-42",
-      "text": "Remove the user-facing \"Collection\" field from the Admin upload form so Admin users cannot see or change any collection value when creating a catalog item.",
+      "id": "REQ-48",
+      "text": "Investigate and fix the issue where selecting a catalog item does not open the correct media viewer (Image/Video/PDF) in the Public Viewer, and ensure the modal reliably opens and stays open when an item card is clicked.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-3"
+          "msg-4"
         ],
         "quotes": [
-          "Remov Collestion from admin page"
+          "Issu not Fixing in mesia Type, Not Opening"
         ]
       },
       "acceptanceCriteria": [
-        "Admin Upload form no longer renders a \"Collection\" label/control anywhere on the Admin page.",
-        "Submitting the Admin Upload form still succeeds and creates a valid catalog item (no runtime/type errors).",
-        "A safe default collection value is applied internally (not shown in UI) so existing catalog data shape continues to work."
+        "Clicking any item card in the Public Viewer always opens the MediaViewerModal.",
+        "The modal does not immediately close after opening unless the user explicitly closes it (close button, clicking outside, or pressing Escape).",
+        "The correct viewer component is rendered based on the item’s media type (image -> ImageZoomViewer, video -> VideoViewer, pdf -> PdfFirstPagePreview)."
       ]
     },
     {
-      "id": "REQ-43",
-      "text": "Remove the \"Collection\" column from the Admin catalog table so existing items no longer display collection values on the Admin page.",
+      "id": "REQ-49",
+      "text": "Add a safe client-side compatibility cleanup/migration when loading catalog items from LocalStorage to prevent media viewers from failing due to invalid or legacy `mediaType` and/or missing `mediaSource` values (e.g., uppercase values like \"PDF\", unexpected strings, or empty URLs). Normalize known variants to supported values ('image' | 'video' | 'pdf') and handle unknown/invalid values gracefully.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-3"
+          "msg-4"
         ],
         "quotes": [
-          "Remov Collestion from admin page"
+          "Issu not Fixing in mesia Type, Not Opening"
         ]
       },
       "acceptanceCriteria": [
-        "Admin catalog table header and rows no longer include a \"Collection\" column/cells.",
-        "The table layout remains usable on mobile/desktop and Actions still work (Remove, etc.)."
-      ]
-    },
-    {
-      "id": "REQ-44",
-      "text": "Update Admin user-facing text so the Admin area contains no visible \"Collection\" wording after removing the Collection UI.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-3"
-        ],
-        "quotes": [
-          "Remov Collestion from admin page"
-        ]
-      },
-      "acceptanceCriteria": [
-        "No Admin-page labels, headings, helper text, or table headers contain the word \"Collection\".",
-        "All remaining Admin UI text is English-only and still reads clearly."
+        "Items loaded from LocalStorage with `mediaType` values such as \"PDF\", \"Video\", or \"Image\" are normalized to lowercase supported values so they can open in the modal.",
+        "If an item has an unsupported/unknown `mediaType`, the modal opens and shows the existing English error UI for unsupported media types (instead of failing silently).",
+        "If an item has an empty/invalid `mediaSource`, the modal opens and shows the existing English error UI for missing/invalid media source (instead of failing silently).",
+        "No runtime errors occur in the catalog grid or modal when encountering malformed stored items."
       ]
     }
   ],
   "constraints": [
     "Frontend immutable paths must not be edited: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui.",
-    "Keep best-effort content protection behaviors unchanged (no right-click / no drag) for existing media previews/viewers."
+    "Keep all user-facing text in English."
   ],
   "nonGoals": [
-    "Do not redesign the Public Viewer filtering/organization as part of this change.",
-    "Do not introduce backend persistence; continue using existing client-side/localStorage behavior."
+    "Do not add new media types beyond image, video, and PDF.",
+    "Do not introduce backend persistence for catalog items (remain LocalStorage-based).",
+    "Do not change the admin credential model or authentication flow."
   ],
   "imageRequirements": {
     "required": [],

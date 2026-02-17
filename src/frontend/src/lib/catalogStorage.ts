@@ -1,4 +1,4 @@
-import type { CatalogItem } from './catalogTypes';
+import type { CatalogItem, StoredCatalogItem } from './catalogTypes';
 
 const STORAGE_KEY = 'maspar_catalog';
 
@@ -7,15 +7,50 @@ function hasLegacyLabel(item: any): boolean {
   return item.label && typeof item.label === 'object' && 'en' in item.label;
 }
 
-// Migrate legacy bilingual label to English-only string
-function migrateLegacyItem(item: any): CatalogItem {
-  if (hasLegacyLabel(item)) {
-    return {
-      ...item,
-      label: item.label.en || item.label.hi || 'Untitled'
-    };
+// Normalize mediaType to lowercase supported values
+function normalizeMediaType(mediaType: string): string {
+  const normalized = mediaType.toLowerCase().trim();
+  // Map known variants to supported types
+  if (['image', 'img', 'picture', 'photo'].includes(normalized)) {
+    return 'image';
   }
-  return item;
+  if (['video', 'vid', 'movie'].includes(normalized)) {
+    return 'video';
+  }
+  if (['pdf', 'document', 'doc'].includes(normalized)) {
+    return 'pdf';
+  }
+  // Return as-is for unsupported types (will trigger error UI in modal)
+  return normalized;
+}
+
+// Sanitize and migrate a stored item
+function sanitizeItem(item: any): CatalogItem {
+  // Migrate legacy bilingual label
+  let label = item.label;
+  if (hasLegacyLabel(item)) {
+    label = item.label.en || item.label.hi || 'Untitled';
+  }
+
+  // Normalize mediaType
+  const mediaType = item.mediaType 
+    ? normalizeMediaType(String(item.mediaType))
+    : 'image'; // Default fallback
+
+  // Ensure mediaSource is a string
+  const mediaSource = item.mediaSource 
+    ? String(item.mediaSource).trim()
+    : '';
+
+  return {
+    id: item.id || `item-${Date.now()}`,
+    title: item.title || 'Untitled',
+    collection: item.collection || '',
+    label,
+    mediaType: mediaType as any, // Cast to allow unsupported types
+    mediaSource,
+    createdAt: item.createdAt || Date.now()
+  };
 }
 
 export function loadCatalog(): CatalogItem[] {
@@ -25,16 +60,19 @@ export function loadCatalog(): CatalogItem[] {
     
     const parsed = JSON.parse(stored);
     
-    // Check if migration is needed
-    const needsMigration = parsed.some((item: any) => hasLegacyLabel(item));
+    // Sanitize all items
+    const sanitized = parsed
+      .filter((item: any) => item && typeof item === 'object') // Filter out null/invalid entries
+      .map(sanitizeItem);
     
-    if (needsMigration) {
-      const migrated = parsed.map(migrateLegacyItem);
-      saveCatalog(migrated);
-      return migrated;
+    // Check if any items were modified during sanitization
+    const needsResave = JSON.stringify(parsed) !== JSON.stringify(sanitized);
+    
+    if (needsResave) {
+      saveCatalog(sanitized);
     }
     
-    return parsed as CatalogItem[];
+    return sanitized;
   } catch (error) {
     console.error('Failed to load catalog:', error);
     return [];

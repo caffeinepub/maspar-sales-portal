@@ -1,61 +1,63 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Maspar Sales Portal — Remove Collection UI from Admin page",
+  "title": "Fix Public Viewer media modal opening and LocalStorage media-type compatibility",
   "requirements": [
     {
-      "id": "REQ-42",
-      "summary": "Remove Collection field from the Admin upload form while still applying an internal default collection value on submit.",
+      "id": "REQ-48",
+      "summary": "Fix Public Viewer item-card click so the MediaViewerModal reliably opens, stays open, and renders the correct viewer for image/video/pdf items.",
       "acceptanceCriteria": [
-        "Admin Upload form no longer renders a \"Collection\" label/control anywhere on the Admin page.",
-        "Submitting the Admin Upload form still succeeds and creates a valid catalog item (no runtime/type errors).",
-        "A safe default collection value is applied internally (not shown in UI) so existing catalog data shape continues to work."
+        "Clicking any item card in the Public Viewer always opens the MediaViewerModal.",
+        "The modal does not immediately close after opening unless the user explicitly closes it (close button, clicking outside, or pressing Escape).",
+        "The correct viewer component is rendered based on the item’s media type (image -> ImageZoomViewer, video -> VideoViewer, pdf -> PdfFirstPagePreview)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/admin/AdminUploadForm.tsx",
+          "path": "frontend/src/components/public/ItemGrid.tsx",
           "operation": "modify",
-          "description": "Remove the user-facing Collection Label/Select from the form UI (currently using shadcn-ui Select). Keep the catalog item shape intact by applying a safe internal default collection value during submission (without rendering it). Verify the component's usage instructions before implementing."
+          "description": "Harden item-card click handling to prevent the opening click from being interpreted as an outside click that immediately closes the modal (e.g., stop propagation / prevent default on the card click handler) while still calling onItemClick with the selected item."
         },
         {
-          "path": "frontend/src/App.tsx",
+          "path": "frontend/src/components/public/PublicViewer.tsx",
           "operation": "modify",
-          "description": "Ensure the Admin add-item handler continues to receive a valid collection value from the upload form after the Collection UI is removed (type-safety / runtime safety only; no behavior changes beyond defaulting)."
+          "description": "Adjust modal open/close state sequencing so the dialog open action is not immediately followed by a close (e.g., ensure selectedItem is set before opening and consider deferring the open state to the next tick), and keep selectedItem stable while the modal is open."
+        },
+        {
+          "path": "frontend/src/components/viewers/MediaViewerModal.tsx",
+          "operation": "modify",
+          "description": "Remove or simplify any redundant close handlers that can double-trigger (e.g., competing Escape handlers) and ensure the controlled Dialog only calls onClose on intentional close actions; keep existing viewer selection logic for image/video/pdf rendering."
         }
       ]
     },
     {
-      "id": "REQ-43",
-      "summary": "Remove the Collection column from the Admin catalog table while keeping actions and responsive layout usable.",
+      "id": "REQ-49",
+      "summary": "Add safe LocalStorage catalog item cleanup/migration to normalize legacy/invalid mediaType and handle missing/invalid mediaSource without runtime errors.",
       "acceptanceCriteria": [
-        "Admin catalog table header and rows no longer include a \"Collection\" column/cells.",
-        "The table layout remains usable on mobile/desktop and Actions still work (Remove, etc.)."
+        "Items loaded from LocalStorage with `mediaType` values such as \"PDF\", \"Video\", or \"Image\" are normalized to lowercase supported values so they can open in the modal.",
+        "If an item has an unsupported/unknown `mediaType`, the modal opens and shows the existing English error UI for unsupported media types (instead of failing silently).",
+        "If an item has an empty/invalid `mediaSource`, the modal opens and shows the existing English error UI for missing/invalid media source (instead of failing silently).",
+        "No runtime errors occur in the catalog grid or modal when encountering malformed stored items."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/admin/AdminCatalogManager.tsx",
+          "path": "frontend/src/lib/catalogTypes.ts",
           "operation": "modify",
-          "description": "Update the shadcn-ui Table rendering to remove the Collection header and the per-row Collection cell while preserving the Actions column and horizontal scrolling behavior for mobile. Verify the component's usage instructions before implementing."
-        }
-      ]
-    },
-    {
-      "id": "REQ-44",
-      "summary": "Remove any remaining visible 'Collection' wording from Admin UI text after the Collection UI is removed.",
-      "acceptanceCriteria": [
-        "No Admin-page labels, headings, helper text, or table headers contain the word \"Collection\".",
-        "All remaining Admin UI text is English-only and still reads clearly."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/lib/uiText.ts",
-          "operation": "modify",
-          "description": "Update centralized Admin UI text so no Admin-facing strings include the word \"Collection\" (e.g., remove/rename the admin form collection label text now that the UI is removed), while keeping remaining Admin text clear and English-only."
+          "description": "Update catalog item typing to safely represent legacy or malformed stored values (e.g., allow mediaType to be a string at runtime while keeping the supported MediaType union) so the UI can render the existing unsupported-type error state instead of crashing."
         },
         {
-          "path": "frontend/src/components/admin/AdminCatalogManager.tsx",
+          "path": "frontend/src/lib/catalogStorage.ts",
           "operation": "modify",
-          "description": "Ensure no hardcoded Admin table headers/cell labels include the word \"Collection\" after the column removal. Verify the component's usage instructions before implementing."
+          "description": "Extend LocalStorage load/migration logic to sanitize stored catalog items: normalize known mediaType variants to 'image' | 'video' | 'pdf' (case-insensitive), preserve unknown mediaType strings for the modal’s unsupported-type error UI, and ensure mediaSource is a string (empty/invalid allowed) without throwing; filter/repair malformed items to prevent runtime errors and persist the migrated results back to LocalStorage."
+        },
+        {
+          "path": "frontend/src/hooks/useCatalog.ts",
+          "operation": "modify",
+          "description": "Ensure catalog initialization uses the updated loadCatalog sanitation/migration results consistently (including post-cleanup/seed flows), and avoid introducing runtime errors when items contain unknown mediaType or missing mediaSource."
+        },
+        {
+          "path": "frontend/src/components/public/ItemGrid.tsx",
+          "operation": "modify",
+          "description": "Make grid rendering resilient to sanitized-but-malformed items (e.g., safely render the media badge text even if mediaType is missing/unknown, and avoid rendering an <img> thumbnail when mediaSource is empty) while keeping all user-facing text in English."
         }
       ]
     }

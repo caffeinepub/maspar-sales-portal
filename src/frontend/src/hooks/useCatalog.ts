@@ -8,6 +8,7 @@ export function useCatalog() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    // Load catalog (already sanitized by loadCatalog)
     let catalog = loadCatalog();
     
     // Clean up deprecated seed items and Blaize items from existing catalogs

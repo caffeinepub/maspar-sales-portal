@@ -7,7 +7,7 @@ import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { Plus } from 'lucide-react';
+import { Plus, AlertCircle } from 'lucide-react';
 
 interface AdminUploadFormProps {
   onAdd: (item: {
@@ -24,14 +24,34 @@ export function AdminUploadForm({ onAdd }: AdminUploadFormProps) {
   const [label, setLabel] = useState('');
   const [mediaType, setMediaType] = useState<MediaType>('image');
   const [mediaSource, setMediaSource] = useState('');
+  const [pdfEmbedError, setPdfEmbedError] = useState(false);
 
   const handlePredefinedLabelSelect = (value: string) => {
     setLabel(value);
   };
 
+  // Basic URL validation
+  const isValidUrl = (url: string): boolean => {
+    if (!url || url.trim().length === 0) return false;
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const urlIsValid = isValidUrl(mediaSource);
+  const showUrlError = mediaSource.length > 0 && !urlIsValid;
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Prevent submission if URL is invalid
+    if (!urlIsValid) {
+      return;
+    }
+
     onAdd({
       title,
       collection: 'colorart', // Apply default collection internally
@@ -44,6 +64,7 @@ export function AdminUploadForm({ onAdd }: AdminUploadFormProps) {
     setTitle('');
     setLabel('');
     setMediaSource('');
+    setPdfEmbedError(false);
   };
 
   return (
@@ -110,14 +131,23 @@ export function AdminUploadForm({ onAdd }: AdminUploadFormProps) {
                 id="mediaSource"
                 type="url"
                 value={mediaSource}
-                onChange={(e) => setMediaSource(e.target.value)}
+                onChange={(e) => {
+                  setMediaSource(e.target.value);
+                  setPdfEmbedError(false);
+                }}
                 placeholder="https://..."
                 required
               />
+              {showUrlError && (
+                <div className="flex items-center gap-2 text-sm text-destructive">
+                  <AlertCircle className="w-4 h-4" />
+                  <span>Please enter a valid URL starting with http:// or https://</span>
+                </div>
+              )}
             </div>
           </div>
 
-          {mediaSource && (
+          {mediaSource && urlIsValid && (
             <div className="space-y-2">
               <Label>{UI_TEXT.admin.formPreview}</Label>
               <div className="glass rounded-lg p-4 flex items-center justify-center min-h-[200px]">
@@ -127,6 +157,14 @@ export function AdminUploadForm({ onAdd }: AdminUploadFormProps) {
                     alt="Preview"
                     className="max-h-[300px] rounded no-drag"
                     draggable={false}
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                      const parent = target.parentElement;
+                      if (parent) {
+                        parent.innerHTML = '<div class="flex flex-col items-center space-y-2 text-muted-foreground"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><span>Image could not be loaded</span></div>';
+                      }
+                    }}
                   />
                 )}
                 {mediaType === 'video' && (
@@ -135,18 +173,41 @@ export function AdminUploadForm({ onAdd }: AdminUploadFormProps) {
                     controls
                     className="max-h-[300px] rounded"
                     controlsList="nodownload"
+                    onError={(e) => {
+                      const target = e.target as HTMLVideoElement;
+                      target.style.display = 'none';
+                      const parent = target.parentElement;
+                      if (parent) {
+                        parent.innerHTML = '<div class="flex flex-col items-center space-y-2 text-muted-foreground"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><span>Video could not be loaded</span></div>';
+                      }
+                    }}
                   />
                 )}
-                {mediaType === 'pdf' && (
-                  <div className="text-center text-muted-foreground">
-                    <p>PDF: {mediaSource}</p>
+                {mediaType === 'pdf' && !pdfEmbedError && (
+                  <div className="w-full">
+                    <iframe
+                      src={`${mediaSource}#page=1&view=FitH`}
+                      className="w-full h-[300px] rounded border border-border"
+                      title="PDF Preview"
+                      onError={() => setPdfEmbedError(true)}
+                    />
+                  </div>
+                )}
+                {mediaType === 'pdf' && pdfEmbedError && (
+                  <div className="flex flex-col items-center space-y-2 text-muted-foreground">
+                    <AlertCircle className="w-8 h-8" />
+                    <p className="text-center">
+                      PDF preview cannot be displayed in this browser.
+                      <br />
+                      The PDF will be available in the public viewer.
+                    </p>
                   </div>
                 )}
               </div>
             </div>
           )}
 
-          <Button type="submit" className="w-full gap-2">
+          <Button type="submit" className="w-full gap-2" disabled={!urlIsValid}>
             <Plus className="w-4 h-4" />
             {UI_TEXT.admin.addButton}
           </Button>

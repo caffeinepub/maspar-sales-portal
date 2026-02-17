@@ -1,12 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Remove all user-facing “Collection” UI and wording from the Admin page while keeping catalog item creation working via an internal default collection value.
+**Goal:** Fix the Public Viewer so clicking any catalog item reliably opens the correct media viewer modal (Image/Video/PDF) and does not close unexpectedly.
 
 **Planned changes:**
-- Remove the “Collection” field (label/control) from the Admin upload form so Admin users cannot view or change collection when creating catalog items.
-- Ensure form submission still creates a valid catalog item by applying a safe default collection value internally (not shown in the UI).
-- Remove the “Collection” column from the Admin catalog table (header and row cells) while keeping the table usable and Actions working.
-- Update any remaining Admin-facing text to eliminate the word “Collection” and keep the Admin UI English-only and clear.
+- Investigate and fix the click/open flow so the MediaViewerModal always opens from an item card click and stays open until the user explicitly closes it.
+- Ensure the modal renders the correct viewer component based on the item’s media type (image/video/pdf).
+- Add a safe client-side cleanup/migration step when loading catalog items from LocalStorage to normalize legacy/invalid `mediaType` values and handle missing/invalid `mediaSource` gracefully without runtime errors.
 
-**User-visible outcome:** Admin users can upload and manage catalog items without seeing any “Collection” field/column/text, and uploads continue to succeed normally.
+**User-visible outcome:** In the Public Viewer, clicking any catalog item consistently opens a modal that shows the correct image/video/PDF preview, and malformed stored items show the existing English error UI instead of failing silently.

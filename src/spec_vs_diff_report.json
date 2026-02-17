@@ -1,56 +1,69 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-17T08:01:02.854Z",
-  "summary": "REQ-42/43/44 appear implemented: Admin upload form no longer renders a Collection control and applies an internal default; Admin catalog table no longer shows a Collection column; admin UI text in the shown files no longer includes the word \"Collection\". However, the diff summary indicates multiple additional, unrelated feature changes beyond the BuildRequest scope.",
+  "generatedAt": "2026-02-17T08:16:59.621Z",
+  "summary": "REQ-48 and REQ-49 appear to be implemented: clicking item cards sets selectedItem and opens MediaViewerModal; the modal renders ImageZoomViewer/VideoViewer/PdfFirstPagePreview based on normalized mediaType and shows error UI for invalid mediaSource or unsupported mediaType; LocalStorage loading now sanitizes/normalizes legacy mediaType variants and mediaSource strings. Several additional unrelated changes (seed cleanup, brand/theme updates, admin/auth and collection-related changes) are present in the diff summary but were not requested by this BuildRequest.",
   "missing_requirements": [],
   "hallucinated_features": [
     {
-      "description": "Removed bilingual label support / introduced English-only label behavior (and/or label language management changes).",
-      "reason": "BuildRequest only asked to remove Collection UI from Admin; it did not request changing label language/bilingual support.",
+      "description": "Automatic cleanup/removal of deprecated seed items and all items in the 'blaize' collection during catalog load, including resaving the cleaned catalog and reseeding behavior changes.",
+      "reason": "BuildRequest focuses only on fixing media viewer opening behavior and adding LocalStorage compatibility cleanup for mediaType/mediaSource; it does not request removing items/collections from stored catalogs.",
       "evidence": [
-        "frontend-file-summaries.txt (catalogTypes.ts: \"removed bilingual label support\"; labelLanguage.ts: \"Language preference management for bilingual labels\")",
-        "project_state.json (summary mentions \"English-only UI (no Hindi)\")"
+        "frontend/src/hooks/useCatalog.ts"
       ]
     },
     {
-      "description": "Brand/theme and styling overhaul (Maspar brand colors update, glassmorphism utilities, Tailwind token changes, orange gradient header styling).",
-      "reason": "Not requested; requirements are limited to removing Collection UI from Admin and updating Admin text.",
+      "description": "Legacy bilingual label migration logic (converting label objects with {en,...} to a single English string) during LocalStorage sanitization.",
+      "reason": "REQ-49 requests migration for invalid/legacy mediaType and/or missing mediaSource only; label migration is not requested.",
       "evidence": [
-        "frontend-file-summaries.txt (index.css, tailwind.config.js: brand colors/glassmorphism updates)",
-        "project_state.json (summary describes broader UI redesign)"
+        "frontend/src/lib/catalogStorage.ts"
       ]
     },
     {
-      "description": "Changes to collections definitions and cleanup/migration logic (e.g., removing Blaize, cleanup of all Blaize items on load).",
-      "reason": "Not requested; non-goal explicitly says not to redesign Public Viewer filtering/organization.",
+      "description": "Expanded mediaType normalization mapping beyond case normalization (e.g., mapping 'img', 'picture', 'photo' to 'image'; 'vid', 'movie' to 'video'; 'document', 'doc' to 'pdf').",
+      "reason": "REQ-49 only specifies normalizing known variants like uppercase 'PDF'/'Video'/'Image' and handling unknown values gracefully; broader synonym mapping was not requested.",
       "evidence": [
-        "frontend-file-summaries.txt (collections.ts: \"Blaize removed\"; useCatalog.ts: \"cleanup of deprecated seed items and all Blaize collection items\")",
-        "frontend-file-summaries.txt (seedCatalog.ts: \"including Blaize Collection Catalog for cleanup logic\")"
+        "frontend/src/lib/catalogStorage.ts"
       ]
     },
     {
-      "description": "Public Viewer feature changes (e.g., label filter dropdown showing thumbnails next to each label option).",
-      "reason": "Not requested and potentially conflicts with the non-goal of not redesigning Public Viewer filtering/organization.",
+      "description": "Brand/theme and UI styling updates (Maspar brand colors, tailwind config, glassmorphism utilities, header/logo changes, layout/footer attribution).",
+      "reason": "Not part of REQ-48/REQ-49 and unrelated to fixing the media viewer opening or LocalStorage media field migration.",
       "evidence": [
-        "frontend-file-summaries.txt (SearchAndFilters.tsx: \"thumbnail images displayed next to each label option\")"
+        "frontend-file-summaries.txt"
       ]
     },
     {
-      "description": "Admin area composition changes unrelated to Collection UI (e.g., banner manager in Admin area).",
-      "reason": "BuildRequest only targets Collection UI removal; adding/altering other admin modules was not requested.",
+      "description": "Admin/auth and admin UI changes (adminAuth credentials model description, admin form/table text and collection column removal).",
+      "reason": "BuildRequest explicitly lists as a non-goal: do not change the admin credential model or authentication flow; also these changes are unrelated to the media viewer bugfix/migration requirements.",
       "evidence": [
-        "frontend-file-summaries.txt (AdminArea.tsx: \"composing the banner manager, upload form, and catalog manager\")",
-        "project_state.json (summary mentions \"Admin-uploaded New Arrivals banner\")"
+        "frontend-file-summaries.txt"
+      ]
+    },
+    {
+      "description": "Collections defaults modified and 'Blaize' removed from collections definitions.",
+      "reason": "Not requested by REQ-48/REQ-49 and related to catalog organization rather than media viewer opening/migration behavior.",
+      "evidence": [
+        "frontend-file-summaries.txt"
+      ]
+    },
+    {
+      "description": "Language preference management for bilingual labels (English/Hindi toggle) mentioned/added in labelLanguage.",
+      "reason": "Not requested by this BuildRequest, which is specifically about media viewer opening and LocalStorage media field migration; also the request emphasizes keeping user-facing text in English.",
+      "evidence": [
+        "frontend-file-summaries.txt"
       ]
     }
   ],
-  "confidence": 0.74,
+  "confidence": 0.72,
   "changed_files": [
     "frontend-file-summaries.txt",
-    "frontend/src/components/admin/AdminCatalogManager.tsx",
-    "frontend/src/components/admin/AdminUploadForm.tsx",
-    "frontend/src/lib/uiText.ts",
+    "frontend/src/components/public/ItemGrid.tsx",
+    "frontend/src/components/public/PublicViewer.tsx",
+    "frontend/src/components/viewers/MediaViewerModal.tsx",
+    "frontend/src/hooks/useCatalog.ts",
+    "frontend/src/lib/catalogStorage.ts",
+    "frontend/src/lib/catalogTypes.ts",
     "project_state.json"
   ]
 }

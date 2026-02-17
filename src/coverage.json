@@ -1,49 +1,45 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-17T08:01:02.858Z",
+  "generatedAt": "2026-02-17T08:16:59.625Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 3,
-    "implemented": 3,
+    "total": 2,
+    "implemented": 2,
     "items": [
       {
-        "id": "REQ-42",
-        "summary": "Remove the user-facing \"Collection\" field from the Admin upload form so Admin users cannot see or change any collection value when creating a catalog item.",
+        "id": "REQ-48",
+        "summary": "Investigate and fix the issue where selecting a catalog item does not open the correct media viewer (Image/Video/PDF) in the Public Viewer, and ensure the modal reliably opens and stays open when an item card is clicked.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/admin/AdminUploadForm.tsx",
-          "frontend/src/App.tsx"
+          "frontend/src/components/public/ItemGrid.tsx",
+          "frontend/src/components/public/PublicViewer.tsx",
+          "frontend/src/components/viewers/MediaViewerModal.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/admin/AdminUploadForm.tsx"
+          "frontend/src/components/public/ItemGrid.tsx",
+          "frontend/src/components/public/PublicViewer.tsx",
+          "frontend/src/components/viewers/MediaViewerModal.tsx"
         ]
       },
       {
-        "id": "REQ-43",
-        "summary": "Remove the \"Collection\" column from the Admin catalog table so existing items no longer display collection values on the Admin page.",
+        "id": "REQ-49",
+        "summary": "Add a safe client-side compatibility cleanup/migration when loading catalog items from LocalStorage to prevent media viewers from failing due to invalid or legacy `mediaType` and/or missing `mediaSource` values (e.g., uppercase values like \"PDF\", unexpected strings, or empty URLs). Normalize known variants to supported values ('image' | 'video' | 'pdf') and handle unknown/invalid values gracefully.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/admin/AdminCatalogManager.tsx"
+          "frontend/src/lib/catalogTypes.ts",
+          "frontend/src/lib/catalogStorage.ts",
+          "frontend/src/hooks/useCatalog.ts",
+          "frontend/src/components/public/ItemGrid.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/admin/AdminCatalogManager.tsx"
-        ]
-      },
-      {
-        "id": "REQ-44",
-        "summary": "Update Admin user-facing text so the Admin area contains no visible \"Collection\" wording after removing the Collection UI.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/lib/uiText.ts",
-          "frontend/src/components/admin/AdminCatalogManager.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/lib/uiText.ts",
-          "frontend/src/components/admin/AdminCatalogManager.tsx"
+          "frontend/src/lib/catalogTypes.ts",
+          "frontend/src/lib/catalogStorage.ts",
+          "frontend/src/hooks/useCatalog.ts",
+          "frontend/src/components/public/ItemGrid.tsx"
         ]
       }
     ]
@@ -53,9 +49,12 @@
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/components/admin/AdminCatalogManager.tsx",
-    "frontend/src/components/admin/AdminUploadForm.tsx",
-    "frontend/src/lib/uiText.ts",
+    "frontend/src/components/public/ItemGrid.tsx",
+    "frontend/src/components/public/PublicViewer.tsx",
+    "frontend/src/components/viewers/MediaViewerModal.tsx",
+    "frontend/src/hooks/useCatalog.ts",
+    "frontend/src/lib/catalogStorage.ts",
+    "frontend/src/lib/catalogTypes.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",
