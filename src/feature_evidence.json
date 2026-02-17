@@ -2,12 +2,13 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-investigate-and-fix-the-issue-where-selecting-a-catalog-item-does-not-open-the-correct-media-viewer-image-video-pdf-in-the-public-viewer-and-ensure-the-modal-reliably-opens-and-stays-open-when-an-item-card-is-clicked",
-      "featureTitle": "Investigate and fix the issue where selecting a catalog item does not open the correct media viewer (Image/Video/PDF) in the Public Viewer, and ensure the modal reliably opens and stays open when an item card is clicked.",
+      "featureId": "feature-add-an-admin-data-transfer-section-that-lets-an-admin-export-download-all-locally-stored-portal-data-catalog-items-new-arrivals-banner-as-a-single-json-file-using-clear-english-ui-text",
+      "featureTitle": "Add an Admin \"Data Transfer\" section that lets an admin export (download) all locally-stored portal data (catalog items + New Arrivals banner) as a single JSON file, using clear English UI text.",
       "files": [
-        "frontend/src/components/public/ItemGrid.tsx",
-        "frontend/src/components/public/PublicViewer.tsx",
-        "frontend/src/components/viewers/MediaViewerModal.tsx"
+        "frontend/src/components/admin/AdminArea.tsx",
+        "frontend/src/components/admin/AdminDataTransfer.tsx",
+        "frontend/src/lib/dataTransfer.ts",
+        "frontend/src/lib/uiText.ts"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -17,18 +18,17 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-48"
+        "REQ-53"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-add-a-safe-client-side-compatibility-cleanup-migration-when-loading-catalog-items-from-localstorage-to-prevent-media-viewers-from-failing-due-to-invalid-or-legacy-mediatype-and-or-missing-mediasource-values-e-g-uppercase-values-like-pdf-unexpected-strings-or-empty-urls-normalize-known-variants-to-supported-values-image-video-pdf-and-handle-unknown-invalid-values-gracefully",
-      "featureTitle": "Add a safe client-side compatibility cleanup/migration when loading catalog items from LocalStorage to prevent media viewers from failing due to invalid or legacy `mediaType` and/or missing `mediaSource` values (e.g., uppercase values like \"PDF\", unexpected strings, or empty URLs). Normalize known variants to supported values ('image' | 'video' | 'pdf') and handle unknown/invalid values gracefully.",
+      "featureId": "feature-add-an-admin-import-flow-that-allows-uploading-a-previously-exported-json-file-and-restores-the-catalog-banner-into-localstorage-then-refreshes-the-ui-so-the-public-viewer-on-the-same-link-immediately-shows-the-imported-data-without-a-hard-refresh",
+      "featureTitle": "Add an Admin import flow that allows uploading a previously exported JSON file and restores the catalog + banner into LocalStorage, then refreshes the UI so the Public Viewer on the same link immediately shows the imported data without a hard refresh.",
       "files": [
-        "frontend/src/components/public/ItemGrid.tsx",
-        "frontend/src/hooks/useCatalog.ts",
-        "frontend/src/lib/catalogStorage.ts",
-        "frontend/src/lib/catalogTypes.ts"
+        "frontend/src/components/admin/AdminDataTransfer.tsx",
+        "frontend/src/lib/dataTransfer.ts",
+        "frontend/src/lib/uiText.ts"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -38,7 +38,26 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-49"
+        "REQ-54"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-the-admin-storage-notice-help-text-to-include-a-short-clear-instruction-that-data-will-not-sync-across-different-links-domains-devices-and-that-export-import-is-the-supported-way-to-move-data-to-another-sharing-link",
+      "featureTitle": "Update the Admin storage notice/help text to include a short, clear instruction that data will not sync across different links/domains/devices and that \"Export/Import\" is the supported way to move data to another sharing link.",
+      "files": [
+        "frontend/src/components/admin/AdminArea.tsx",
+        "frontend/src/lib/uiText.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-55"
       ],
       "confidence": "high"
     }

@@ -9,7 +9,7 @@ import { UI_TEXT } from './lib/uiText';
 import { Eye, Shield } from 'lucide-react';
 
 function App() {
-  const { items, isLoading, addItem, removeItem } = useCatalog();
+  const { items, isLoading, addItem, removeItem, refreshCatalog } = useCatalog();
   const [activeTab, setActiveTab] = useState('public');
   const [publicViewerRefresh, setPublicViewerRefresh] = useState(0);
 
@@ -30,9 +30,10 @@ function App() {
 
   const handleTabChange = (value: string) => {
     setActiveTab(value);
-    // When switching back to public viewer, trigger a refresh to check banner state
+    // When switching back to public viewer, trigger a refresh to check banner and catalog state
     if (value === 'public') {
       setPublicViewerRefresh(prev => prev + 1);
+      refreshCatalog();
     }
   };
 

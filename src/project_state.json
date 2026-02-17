@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 31,
+  "projectStateVersion": 35,
   "summary": "Mobile-responsive Maspar sales team portal (HTML/CSS/JS, CodePen-ready) with sales-team login (no public viewer) + secure Admin panel, English-only UI (no Hindi), corporate clean modern white/soft-shadow card UI with sidebar navigation, localStorage-based catalog/media management (PDF/image/video) with view-only protected viewing (best-effort no-download), and support for item metadata including Product Name, Label (terminology replaces Collection), Preview/Open, description, edit/replace file, delete/hide, and reordering; includes Admin-uploaded New Arrivals banner (1280x720).",
   "architectural_notes": [
     "Pure HTML/CSS/JS only; CDN libraries allowed (e.g., PDF.js); must run directly on CodePen.",
@@ -15,7 +15,8 @@
     "User reports requested UI changes were not applied/visible; verify latest build reflects requested updates (especially theme colors).",
     "New Arrivals banner is not showing on the home page (regression/bug to fix).",
     "Build/deploy pipeline hit a configuration error (\"Please notify the Caffeine team\"); blocks applying latest changes until resolved.",
-    "Media Type viewer is not opening (user reports issue: \"media type not opening\"); investigate and fix."
+    "Media Type viewer is not opening (user reports issue: \"media type not opening\"); investigate and fix.",
+    "User reports website data is not updating on another link/environment; investigate deployment/version sync or caching causing stale data across links."
   ],
   "isFixRequest": true,
   "existing_features": [
@@ -392,6 +393,54 @@
       "title": "Add a safe client-side compatibility cleanup/migration when loading catalog items from LocalStorage to prevent media viewers from failing due to invalid or legacy `mediaType` and/or missing `mediaSource` values (e.g., uppercase values like \"PDF\", unexpected strings, or empty URLs). Normalize known variants to supported values ('image' | 'video' | 'pdf') and handle unknown/invalid values gracefully.",
       "reqIds": [
         "REQ-49"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-investigate-and-fix-why-catalog-data-changes-made-in-the-admin-area-do-not-appear-in-the-public-viewer-when-the-user-opens-the-app-in-another-tab-window-of-the-same-site-same-origin-without-requiring-a-hard-refresh",
+      "title": "Investigate and fix why catalog data changes made in the Admin area do not appear in the Public Viewer when the user opens the app in another tab/window of the same site (same origin), without requiring a hard refresh.",
+      "reqIds": [
+        "REQ-50"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-safe-explicit-catalog-change-synchronization-similar-to-the-existing-banner-synchronization-broadcast-catalog-updates-on-write-and-subscribe-to-updates-so-the-ui-refreshes-when-localstorage-changes-including-via-the-browser-storage-event-for-other-tabs",
+      "title": "Add safe, explicit catalog-change synchronization similar to the existing banner synchronization: broadcast catalog updates on write and subscribe to updates so the UI refreshes when LocalStorage changes (including via the browser 'storage' event for other tabs).",
+      "reqIds": [
+        "REQ-51"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-clear-english-only-user-facing-guidance-in-the-admin-area-explaining-that-catalog-banner-data-is-stored-in-the-browser-localstorage-and-will-not-automatically-sync-between-different-website-links-domains-or-different-devices",
+      "title": "Add clear English-only user-facing guidance in the Admin area explaining that catalog/banner data is stored in the browser (LocalStorage) and will not automatically sync between different website links/domains or different devices.",
+      "reqIds": [
+        "REQ-52"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-an-admin-data-transfer-section-that-lets-an-admin-export-download-all-locally-stored-portal-data-catalog-items-new-arrivals-banner-as-a-single-json-file-using-clear-english-ui-text",
+      "title": "Add an Admin \"Data Transfer\" section that lets an admin export (download) all locally-stored portal data (catalog items + New Arrivals banner) as a single JSON file, using clear English UI text.",
+      "reqIds": [
+        "REQ-53"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-an-admin-import-flow-that-allows-uploading-a-previously-exported-json-file-and-restores-the-catalog-banner-into-localstorage-then-refreshes-the-ui-so-the-public-viewer-on-the-same-link-immediately-shows-the-imported-data-without-a-hard-refresh",
+      "title": "Add an Admin import flow that allows uploading a previously exported JSON file and restores the catalog + banner into LocalStorage, then refreshes the UI so the Public Viewer on the same link immediately shows the imported data without a hard refresh.",
+      "reqIds": [
+        "REQ-54"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-admin-storage-notice-help-text-to-include-a-short-clear-instruction-that-data-will-not-sync-across-different-links-domains-devices-and-that-export-import-is-the-supported-way-to-move-data-to-another-sharing-link",
+      "title": "Update the Admin storage notice/help text to include a short, clear instruction that data will not sync across different links/domains/devices and that \"Export/Import\" is the supported way to move data to another sharing link.",
+      "reqIds": [
+        "REQ-55"
       ],
       "version": 1
     }

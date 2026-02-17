@@ -1,69 +1,52 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-17T08:16:59.621Z",
-  "summary": "REQ-48 and REQ-49 appear to be implemented: clicking item cards sets selectedItem and opens MediaViewerModal; the modal renders ImageZoomViewer/VideoViewer/PdfFirstPagePreview based on normalized mediaType and shows error UI for invalid mediaSource or unsupported mediaType; LocalStorage loading now sanitizes/normalizes legacy mediaType variants and mediaSource strings. Several additional unrelated changes (seed cleanup, brand/theme updates, admin/auth and collection-related changes) are present in the diff summary but were not requested by this BuildRequest.",
-  "missing_requirements": [],
-  "hallucinated_features": [
+  "generatedAt": "2026-02-17T10:00:11.639Z",
+  "summary": "Diff adds an Admin “Data Transfer” section with export/download and import/upload flows, plus updated English-only storage notice text. Export bundles catalog + banner into one JSON file; import includes a confirmation dialog and validation helpers. Some import-side behaviors (LocalStorage overwrite + sync refresh) are not fully verifiable due to truncation of the dataTransfer implementation.",
+  "missing_requirements": [
     {
-      "description": "Automatic cleanup/removal of deprecated seed items and all items in the 'blaize' collection during catalog load, including resaving the cleaned catalog and reseeding behavior changes.",
-      "reason": "BuildRequest focuses only on fixing media viewer opening behavior and adding LocalStorage compatibility cleanup for mediaType/mediaSource; it does not request removing items/collections from stored catalogs.",
+      "id": "REQ-54",
+      "requirement": "After import completes, the Admin catalog table updates and the Public Viewer updates (catalog + banner) without a full page reload, using the existing in-app sync patterns (custom events + storage event).",
+      "reason": "The UI component calls importData(), but the implementation of importData() is truncated, so it cannot be confirmed that it writes via the existing storage helpers (which broadcast events) and/or otherwise triggers the required UI refresh behavior.",
       "evidence": [
-        "frontend/src/hooks/useCatalog.ts"
+        "frontend/src/lib/dataTransfer.ts (truncated at start of importData implementation)",
+        "frontend/src/components/admin/AdminDataTransfer.tsx (calls importData(data) and relies on side effects)"
       ]
     },
     {
-      "description": "Legacy bilingual label migration logic (converting label objects with {en,...} to a single English string) during LocalStorage sanitization.",
-      "reason": "REQ-49 requests migration for invalid/legacy mediaType and/or missing mediaSource only; label migration is not requested.",
+      "id": "REQ-54",
+      "requirement": "Importing banner data uses the existing banner sync mechanism so the banner reliably appears when set.",
+      "reason": "dataTransfer.ts imports saveBanner/clearBanner/loadBanner, but the code path that applies banner data during import is not visible due to truncation, so use of the existing banner sync mechanism cannot be verified.",
       "evidence": [
-        "frontend/src/lib/catalogStorage.ts"
+        "frontend/src/lib/dataTransfer.ts (imports saveBanner/clearBanner/loadBanner; importData body truncated)"
       ]
     },
     {
-      "description": "Expanded mediaType normalization mapping beyond case normalization (e.g., mapping 'img', 'picture', 'photo' to 'image'; 'vid', 'movie' to 'video'; 'document', 'doc' to 'pdf').",
-      "reason": "REQ-49 only specifies normalizing known variants like uppercase 'PDF'/'Video'/'Image' and handling unknown values gracefully; broader synonym mapping was not requested.",
+      "id": "REQ-54",
+      "requirement": "If the file is invalid/unparseable, show a clear English error message and do not overwrite existing data.",
+      "reason": "There is validation logic (validateImportData) and UI error display plumbing, but parseImportFile() and the remainder of importData() are not shown, so it cannot be confirmed that invalid/unparseable files are always prevented from overwriting LocalStorage.",
       "evidence": [
-        "frontend/src/lib/catalogStorage.ts"
-      ]
-    },
-    {
-      "description": "Brand/theme and UI styling updates (Maspar brand colors, tailwind config, glassmorphism utilities, header/logo changes, layout/footer attribution).",
-      "reason": "Not part of REQ-48/REQ-49 and unrelated to fixing the media viewer opening or LocalStorage media field migration.",
-      "evidence": [
-        "frontend-file-summaries.txt"
-      ]
-    },
-    {
-      "description": "Admin/auth and admin UI changes (adminAuth credentials model description, admin form/table text and collection column removal).",
-      "reason": "BuildRequest explicitly lists as a non-goal: do not change the admin credential model or authentication flow; also these changes are unrelated to the media viewer bugfix/migration requirements.",
-      "evidence": [
-        "frontend-file-summaries.txt"
-      ]
-    },
-    {
-      "description": "Collections defaults modified and 'Blaize' removed from collections definitions.",
-      "reason": "Not requested by REQ-48/REQ-49 and related to catalog organization rather than media viewer opening/migration behavior.",
-      "evidence": [
-        "frontend-file-summaries.txt"
-      ]
-    },
-    {
-      "description": "Language preference management for bilingual labels (English/Hindi toggle) mentioned/added in labelLanguage.",
-      "reason": "Not requested by this BuildRequest, which is specifically about media viewer opening and LocalStorage media field migration; also the request emphasizes keeping user-facing text in English.",
-      "evidence": [
-        "frontend-file-summaries.txt"
+        "frontend/src/lib/dataTransfer.ts (validateImportData present; importData truncated; parseImportFile referenced but not shown)",
+        "frontend/src/components/admin/AdminDataTransfer.tsx (try/catch sets error message, but overwrite prevention depends on truncated code)"
       ]
     }
   ],
-  "confidence": 0.72,
+  "hallucinated_features": [
+    {
+      "description": "Export file includes extra metadata fields (version, exportedAt) beyond the requested catalog+banner payload.",
+      "reason": "REQ-53 only requires catalog (maspar_catalog) and banner (maspar_new_arrivals_banner) to be included; the diff adds additional fields in the exported JSON structure.",
+      "evidence": [
+        "frontend/src/lib/dataTransfer.ts (ExportData includes version/exportedAt; exportData returns them)"
+      ]
+    }
+  ],
+  "confidence": 0.62,
   "changed_files": [
     "frontend-file-summaries.txt",
-    "frontend/src/components/public/ItemGrid.tsx",
-    "frontend/src/components/public/PublicViewer.tsx",
-    "frontend/src/components/viewers/MediaViewerModal.tsx",
-    "frontend/src/hooks/useCatalog.ts",
-    "frontend/src/lib/catalogStorage.ts",
-    "frontend/src/lib/catalogTypes.ts",
+    "frontend/src/components/admin/AdminArea.tsx",
+    "frontend/src/components/admin/AdminDataTransfer.tsx",
+    "frontend/src/lib/dataTransfer.ts",
+    "frontend/src/lib/uiText.ts",
     "project_state.json"
   ]
 }

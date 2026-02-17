@@ -1,63 +1,92 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Fix Public Viewer media modal opening and LocalStorage media-type compatibility",
+  "title": "Maspar Sales Portal — Admin Export/Import Data Transfer (LocalStorage JSON)",
   "requirements": [
     {
-      "id": "REQ-48",
-      "summary": "Fix Public Viewer item-card click so the MediaViewerModal reliably opens, stays open, and renders the correct viewer for image/video/pdf items.",
+      "id": "REQ-53",
+      "summary": "Add an Admin \"Data Transfer\" section to export all locally-stored catalog + banner data as a single downloadable JSON file.",
       "acceptanceCriteria": [
-        "Clicking any item card in the Public Viewer always opens the MediaViewerModal.",
-        "The modal does not immediately close after opening unless the user explicitly closes it (close button, clicking outside, or pressing Escape).",
-        "The correct viewer component is rendered based on the item’s media type (image -> ImageZoomViewer, video -> VideoViewer, pdf -> PdfFirstPagePreview)."
+        "Admin page shows a new \"Data Transfer\" (or equivalent) card/section.",
+        "Clicking \"Export\" downloads a JSON file containing the current catalog (from localStorage key `maspar_catalog`) and banner (from localStorage key `maspar_new_arrivals_banner`).",
+        "Export works even when either catalog is empty or banner is not set (file still downloads with empty/null values).",
+        "All user-facing text in this section is English-only and consistent with existing UI style (glassmorphism cards, theme tokens)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/public/ItemGrid.tsx",
-          "operation": "modify",
-          "description": "Harden item-card click handling to prevent the opening click from being interpreted as an outside click that immediately closes the modal (e.g., stop propagation / prevent default on the card click handler) while still calling onItemClick with the selected item."
+          "path": "frontend/src/components/admin/AdminDataTransfer.tsx",
+          "operation": "create",
+          "description": "Create a new Admin \"Data Transfer\" glassmorphism card/section that provides an Export action and renders English-only helper text. Use shadcn-ui Card/Button/Alert/Input where appropriate to match existing admin UI; Verify the component's usage instructions before implementing. Export should build a single JSON payload from localStorage keys `maspar_catalog` and `maspar_new_arrivals_banner` (tolerating missing/empty values) and trigger a browser download."
         },
         {
-          "path": "frontend/src/components/public/PublicViewer.tsx",
-          "operation": "modify",
-          "description": "Adjust modal open/close state sequencing so the dialog open action is not immediately followed by a close (e.g., ensure selectedItem is set before opening and consider deferring the open state to the next tick), and keep selectedItem stable while the modal is open."
+          "path": "frontend/src/lib/dataTransfer.ts",
+          "operation": "create",
+          "description": "Add frontend-only helper utilities to build an export payload from LocalStorage and trigger JSON file download (Blob + object URL), ensuring export always produces a file even when catalog is empty and/or banner is not set."
         },
         {
-          "path": "frontend/src/components/viewers/MediaViewerModal.tsx",
+          "path": "frontend/src/components/admin/AdminArea.tsx",
           "operation": "modify",
-          "description": "Remove or simplify any redundant close handlers that can double-trigger (e.g., competing Escape handlers) and ensure the controlled Dialog only calls onClose on intentional close actions; keep existing viewer selection logic for image/video/pdf rendering."
+          "description": "Wire the new AdminDataTransfer component into the Admin page layout as a new \"Data Transfer\" section/card, keeping the existing glassmorphism styling conventions and English-only UI copy."
+        },
+        {
+          "path": "frontend/src/lib/uiText.ts",
+          "operation": "modify",
+          "description": "Add English-only UI_TEXT entries for the Admin \"Data Transfer\" section (title, description, export button label, and any helper/tooltip text) to keep copy consistent and centralized."
         }
       ]
     },
     {
-      "id": "REQ-49",
-      "summary": "Add safe LocalStorage catalog item cleanup/migration to normalize legacy/invalid mediaType and handle missing/invalid mediaSource without runtime errors.",
+      "id": "REQ-54",
+      "summary": "Add an Admin import flow to upload an exported JSON file, safely restore catalog + banner into LocalStorage, and refresh both Admin + Public Viewer UI without hard reload.",
       "acceptanceCriteria": [
-        "Items loaded from LocalStorage with `mediaType` values such as \"PDF\", \"Video\", or \"Image\" are normalized to lowercase supported values so they can open in the modal.",
-        "If an item has an unsupported/unknown `mediaType`, the modal opens and shows the existing English error UI for unsupported media types (instead of failing silently).",
-        "If an item has an empty/invalid `mediaSource`, the modal opens and shows the existing English error UI for missing/invalid media source (instead of failing silently).",
-        "No runtime errors occur in the catalog grid or modal when encountering malformed stored items."
+        "Admin can select an exported JSON file and click \"Import\" (or equivalent) to restore data.",
+        "After import completes, the Admin catalog table updates to show imported items and the Public Viewer updates to show imported items and the banner (if present) without requiring a full page reload.",
+        "Import validates JSON shape safely: if the file is invalid/unparseable, show a clear English error message and do not overwrite existing data.",
+        "Imported catalog items are passed through existing sanitization/migration behavior (e.g., legacy label objects, mediaType normalization) so the viewer does not break on older exports.",
+        "Importing banner data uses the existing banner sync mechanism so the banner reliably appears when set.",
+        "Provide an explicit confirmation prompt before overwriting current LocalStorage data (English-only)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/lib/catalogTypes.ts",
+          "path": "frontend/src/components/admin/AdminDataTransfer.tsx",
           "operation": "modify",
-          "description": "Update catalog item typing to safely represent legacy or malformed stored values (e.g., allow mediaType to be a string at runtime while keeping the supported MediaType union) so the UI can render the existing unsupported-type error state instead of crashing."
+          "description": "Extend the Admin \"Data Transfer\" section to include an Import flow (file input + Import button), an explicit confirmation prompt before overwriting LocalStorage, and clear English-only success/error feedback. Use shadcn-ui Input/Button/Alert components to match existing admin UI; Verify the component's usage instructions before implementing. On successful import, update LocalStorage via existing in-app sync patterns (CustomEvent + storage event behavior via existing save helpers) so both Admin and Public Viewer update immediately without a hard refresh."
+        },
+        {
+          "path": "frontend/src/lib/dataTransfer.ts",
+          "operation": "modify",
+          "description": "Implement safe import parsing and validation (unparseable/invalid shape must not overwrite current data). When valid, restore catalog and banner by calling existing storage modules so they broadcast in-app sync events; keep logic frontend-only and avoid any server persistence."
         },
         {
           "path": "frontend/src/lib/catalogStorage.ts",
           "operation": "modify",
-          "description": "Extend LocalStorage load/migration logic to sanitize stored catalog items: normalize known mediaType variants to 'image' | 'video' | 'pdf' (case-insensitive), preserve unknown mediaType strings for the modal’s unsupported-type error UI, and ensure mediaSource is a string (empty/invalid allowed) without throwing; filter/repair malformed items to prevent runtime errors and persist the migrated results back to LocalStorage."
+          "description": "Expose a small, reusable catalog sanitization/migration helper (reusing the same logic currently applied during load) so imported catalog arrays can be normalized (legacy label objects, mediaType normalization, required field fallbacks) before saving, ensuring older exports cannot break the viewer."
         },
         {
-          "path": "frontend/src/hooks/useCatalog.ts",
+          "path": "frontend/src/lib/uiText.ts",
           "operation": "modify",
-          "description": "Ensure catalog initialization uses the updated loadCatalog sanitation/migration results consistently (including post-cleanup/seed flows), and avoid introducing runtime errors when items contain unknown mediaType or missing mediaSource."
+          "description": "Add/extend English-only UI_TEXT entries for the import flow: import button label, file input label, confirmation prompt copy, invalid file/parse error copy, and success copy."
+        }
+      ]
+    },
+    {
+      "id": "REQ-55",
+      "summary": "Update the Admin storage notice/help text to explain LocalStorage does not sync across links/domains/devices and Export/Import is the supported way to move data.",
+      "acceptanceCriteria": [
+        "Admin notice remains English-only and explicitly mentions that different sharing links can have different LocalStorage, so data may not appear automatically.",
+        "The notice mentions the new Export/Import option as the workaround to move data.",
+        "No Hindi text appears anywhere in the updated notice/UI copy."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/lib/uiText.ts",
+          "operation": "modify",
+          "description": "Update UI_TEXT.admin.storageNoticeDescription (English-only) to explicitly state that LocalStorage is per browser + per link/domain/device and will not automatically sync across sharing links, and that the supported way to move data is the new Export/Import in Admin Data Transfer."
         },
         {
-          "path": "frontend/src/components/public/ItemGrid.tsx",
+          "path": "frontend/src/components/admin/AdminArea.tsx",
           "operation": "modify",
-          "description": "Make grid rendering resilient to sanitized-but-malformed items (e.g., safely render the media badge text even if mediaType is missing/unknown, and avoid rendering an <img> thumbnail when mediaSource is empty) while keeping all user-facing text in English."
+          "description": "Ensure the Admin storage notice continues to display the updated English-only help copy (and remains consistent with glassmorphism/theme tokens), referencing Export/Import as the supported workaround."
         }
       ]
     }

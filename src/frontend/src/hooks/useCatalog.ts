@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { CatalogItem } from '../lib/catalogTypes';
-import { loadCatalog, saveCatalog, addItem as addItemToStorage, removeItem as removeItemFromStorage } from '../lib/catalogStorage';
+import { loadCatalog, saveCatalog, addItem as addItemToStorage, removeItem as removeItemFromStorage, subscribeToCatalogChanges } from '../lib/catalogStorage';
 import { SEED_CATALOG, DEPRECATED_SEED_IDS, DEPRECATED_SEED_TITLES } from '../lib/seedCatalog';
 
 export function useCatalog() {
@@ -46,6 +46,15 @@ export function useCatalog() {
     }
     
     setIsLoading(false);
+  }, []);
+
+  // Subscribe to catalog changes (both in-app and cross-tab)
+  useEffect(() => {
+    const unsubscribe = subscribeToCatalogChanges((updatedCatalog) => {
+      setItems(updatedCatalog);
+    });
+
+    return unsubscribe;
   }, []);
 
   const addItem = (item: CatalogItem) => {

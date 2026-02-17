@@ -1,6 +1,7 @@
 import type { CatalogItem, StoredCatalogItem } from './catalogTypes';
 
 const STORAGE_KEY = 'maspar_catalog';
+const CATALOG_CHANGE_EVENT = 'maspar-catalog-change';
 
 // Helper to check if an item has legacy bilingual label
 function hasLegacyLabel(item: any): boolean {
@@ -69,7 +70,8 @@ export function loadCatalog(): CatalogItem[] {
     const needsResave = JSON.stringify(parsed) !== JSON.stringify(sanitized);
     
     if (needsResave) {
-      saveCatalog(sanitized);
+      // Save without broadcasting to avoid infinite loops during load
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(sanitized));
     }
     
     return sanitized;
@@ -82,6 +84,8 @@ export function loadCatalog(): CatalogItem[] {
 export function saveCatalog(items: CatalogItem[]): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    // Broadcast catalog change event for in-app synchronization
+    window.dispatchEvent(new CustomEvent(CATALOG_CHANGE_EVENT, { detail: items }));
   } catch (error) {
     console.error('Failed to save catalog:', error);
   }
@@ -106,4 +110,27 @@ export function updateItem(id: string, updates: Partial<CatalogItem>): void {
     catalog[index] = { ...catalog[index], ...updates };
     saveCatalog(catalog);
   }
+}
+
+// Subscribe to catalog changes (both in-app and cross-tab)
+export function subscribeToCatalogChanges(callback: (catalog: CatalogItem[]) => void): () => void {
+  const handleCustomEvent = (e: Event) => {
+    const customEvent = e as CustomEvent<CatalogItem[]>;
+    callback(customEvent.detail);
+  };
+
+  const handleStorageEvent = (e: StorageEvent) => {
+    if (e.key === STORAGE_KEY) {
+      // Reload catalog from storage when changed in another tab
+      callback(loadCatalog());
+    }
+  };
+
+  window.addEventListener(CATALOG_CHANGE_EVENT, handleCustomEvent);
+  window.addEventListener('storage', handleStorageEvent);
+
+  return () => {
+    window.removeEventListener(CATALOG_CHANGE_EVENT, handleCustomEvent);
+    window.removeEventListener('storage', handleStorageEvent);
+  };
 }
