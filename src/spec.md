@@ -1,12 +1,12 @@
 # Specification
 
 ## Summary
-**Goal:** Add a predefined, shared label set and use it in the Admin Upload form via a dropdown so admins select labels instead of typing them.
+**Goal:** Fix the portal theme so the new brand orange (#FAA831) and a grey-dominant (“70% grey”) glassmorphism look apply consistently across the frontend, replacing any remaining old orange (#F15A22).
 
 **Planned changes:**
-- Create a dedicated frontend module that exports the predefined label list as a single source of truth: Colorart, Vintage, Hermosa, Rurban, Essentials, Eternal Treasure, Hues, Inhouse, Cotsmere, Little Maspar, Generic, Maspar.
-- Update Admin Upload form to include a label selection control (dropdown/combobox) populated from the shared label list.
-- On label selection, auto-populate the English label field with the selected label value while keeping the Hindi label field present and editable.
-- Ensure existing add-item flow continues to persist items to localStorage and display correctly in Admin catalog manager and Public Viewer.
+- Update global theme tokens and CSS variables (including header gradient and primary accents) to use #FAA831 and remove remaining references to #F15A22.
+- Update Tailwind theme configuration so `maspar.orange` maps to #FAA831 and any related orange-tinted glow/shadow values align with the new orange accent.
+- Audit key UI areas (Header, Tabs, Collection cards, Search/Filters panel, Item grid cards, Media viewer modal) to remove hardcoded primary hex colors and ensure components rely on theme tokens for consistent grey surfaces + orange accents.
+- Ensure grey-neutral surfaces and text contrast remain readable in both light and dark modes with the updated glassmorphism styling.
 
-**User-visible outcome:** Admins can pick a label from a predefined dropdown during upload; the English label is filled automatically, and the Hindi label can still be entered/overridden manually.
+**User-visible outcome:** On a fresh load, the portal displays a consistent grey-dominant glass theme with orange #FAA831 used only for emphasis (active states, rings, highlights), with no visible remnants of the old orange theme.

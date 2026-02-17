@@ -2,10 +2,11 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-create-a-predefined-label-list-based-on-the-uploaded-image-and-make-it-available-to-the-frontend-as-a-single-source-of-truth-the-label-list-must-include-colorart-vintage-hermosa-rurban-essentials-eternal-treasure-hues-inhouse-cotsmere-little-maspar-generic-maspar",
-      "featureTitle": "Create a predefined label list based on the uploaded image and make it available to the frontend as a single source of truth. The label list must include: Colorart, Vintage, Hermosa, Rurban, Essentials, Eternal Treasure, Hues, Inhouse, Cotsmere, Little Maspar, Generic, Maspar.",
+      "featureId": "feature-update-the-global-theme-tokens-so-the-app-primary-brand-color-is-orange-faa831-replacing-any-remaining-f15a22-and-the-overall-look-is-a-grey-dominant-70-grey-glassmorphism-theme-while-keeping-orange-as-the-accent-for-key-ui-emphasis-rings-active-states-highlights",
+      "featureTitle": "Update the global theme tokens so the app primary brand color is Orange #FAA831 (replacing any remaining #F15A22) and the overall look is a grey-dominant (\"70% grey\") glassmorphism theme, while keeping orange as the accent for key UI emphasis (rings, active states, highlights).",
       "files": [
-        "frontend/src/lib/predefinedLabels.ts"
+        "frontend/src/index.css",
+        "frontend/tailwind.config.js"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -15,16 +16,16 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-10"
+        "REQ-17"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-update-the-admin-upload-form-so-admins-can-select-from-the-predefined-labels-instead-of-typing-label-text-manually-keep-bilingual-label-support-selecting-a-predefined-label-should-populate-the-english-label-field-and-the-hindi-label-field-must-remain-editable-so-admins-can-enter-override-hindi-when-needed",
-      "featureTitle": "Update the Admin Upload form so admins can select from the predefined labels instead of typing label text manually. Keep bilingual label support: selecting a predefined label should populate the English label field, and the Hindi label field must remain editable so admins can enter/override Hindi when needed.",
+      "featureId": "feature-ensure-the-updated-theme-changes-are-actually-reflected-in-the-deployed-build-by-removing-avoiding-hardcoded-color-values-in-component-classnames-where-they-override-theme-tokens-and-by-relying-on-the-css-variables-theme-tokens-for-all-primary-secondary-accent-styling",
+      "featureTitle": "Ensure the updated theme changes are actually reflected in the deployed build by removing/avoiding hardcoded color values in component classNames where they override theme tokens, and by relying on the CSS variables/theme tokens for all primary/secondary/accent styling.",
       "files": [
-        "frontend/src/components/admin/AdminUploadForm.tsx",
-        "frontend/src/lib/uiText.ts"
+        "frontend/src/index.css",
+        "frontend/tailwind.config.js"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -34,7 +35,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-11"
+        "REQ-19"
       ],
       "confidence": "high"
     }

@@ -1,43 +1,117 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Add predefined labels module and dropdown selection in Admin upload",
+  "title": "Maspar Portal theme fix: Orange #FAA831 + grey-dominant glass UI",
   "requirements": [
     {
-      "id": "REQ-10",
-      "summary": "Add a single-source predefined label set module for admin/public UI usage.",
+      "id": "REQ-17",
+      "summary": "Update global theme tokens to Orange #FAA831 with a grey-dominant glassmorphism base and orange accents.",
       "acceptanceCriteria": [
-        "A dedicated module (e.g., in frontend/src/lib) exports the label set as an array (or similar) that can be imported by UI components.",
-        "The exported label set includes exactly the 12 labels shown in the uploaded image: Colorart, Vintage, Hermosa, Rurban, Essentials, Eternal Treasure, Hues, Inhouse, Cotsmere, Little Maspar, Generic, Maspar.",
-        "No user-facing UI text is introduced in Hindi; user-facing UI text remains English."
+        "In frontend/src/index.css, update the primary color and any orange-gradient definitions so the visible header gradient and primary accents reflect #FAA831 (not #F15A22).",
+        "In frontend/tailwind.config.js, update the Maspar brand color mapping so maspar.orange is #FAA831 and any orange-tinted shadow/glass values are aligned to the new orange.",
+        "The default page background, surfaces (glass cards), and muted/secondary UI read as predominantly grey-neutral (not orange-tinted), with orange used only for accents like active rings, primary buttons, and highlight glows."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/lib/predefinedLabels.ts",
-          "operation": "create",
-          "description": "Create a dedicated frontend lib module exporting the predefined label set (exactly the 12 required labels) as an immutable array and (optionally) a helper for validation/normalization to act as the single source of truth."
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Update the shadcn-ui style CSS variable tokens to be grey-neutral (\"70% grey\" feel) for background/surfaces/muted/border in both light and dark modes; update --primary/--ring to match Orange #FAA831; refactor .maspar-gradient to derive from theme tokens (no legacy oklch literals tied to the old orange). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Change maspar.orange from #F15A22 to #FAA831; update any orange-tinted shadow/glass values (e.g., shadow-glass) to use the updated orange (prefer theme-token-driven color such as oklch(var(--primary) / ...)). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/index.css",
+          "operation": "modify",
+          "description": "Align root-level CSS tokens with frontend/src/index.css (or remove conflicting defaults) so no build configuration can accidentally include a mismatched/legacy theme sheet; keep the same primary Orange #FAA831 and grey-dominant base tokens. Verify the component's usage instructions before implementing."
         }
       ]
     },
     {
-      "id": "REQ-11",
-      "summary": "Replace manual label typing with a predefined-label dropdown in AdminUploadForm while keeping Hindi editable.",
+      "id": "REQ-18",
+      "summary": "Audit key screens/components and normalize remaining old-orange or inconsistent grey styling across public and admin UI.",
       "acceptanceCriteria": [
-        "AdminUploadForm provides a label selection control (dropdown/combobox) that lists the predefined labels.",
-        "When a predefined label is selected, the English label input is automatically set to that label value.",
-        "The Hindi label input remains present and editable after selecting a predefined label.",
-        "Existing add-item flow still works: added items persist to localStorage and appear in the Admin catalog manager and Public Viewer without regressions."
+        "No prominent UI element shows the previous orange hue (#F15A22) after the update; all orange accents match the new brand orange (#FAA831).",
+        "Collection selection (ring/shadow), hover lift glow, and primary highlights use the updated primary color and look consistent between Public Viewer and Admin UI.",
+        "Grey surfaces and text contrast remain readable in both light and dark modes (no washed-out text on glass cards)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/admin/AdminUploadForm.tsx",
+          "path": "frontend/src/components/layout/MasparLayout.tsx",
           "operation": "modify",
-          "description": "Import the predefined labels from frontend/src/lib/predefinedLabels and add a label selection control using existing shadcn/ui Select components (compose as-is; do not edit files under frontend/src/components/ui). Selecting an option should set the English label state to the selected label while keeping the English input present (and optionally still editable) and leaving the Hindi input editable. Verify the component's usage instructions before implementing."
+          "description": "Audit header/footer classes to ensure they rely on theme tokens (primary/accent/muted) rather than any color-specific utility overrides; ensure header gradient and shadows remain consistent with the updated orange accent + grey base. Verify the component's usage instructions before implementing."
         },
         {
-          "path": "frontend/src/lib/uiText.ts",
+          "path": "frontend/src/App.tsx",
           "operation": "modify",
-          "description": "Add/adjust English-only admin form copy needed for the new predefined label selector (e.g., a field label like \"Predefined Label\") ensuring no Hindi user-facing UI text is introduced."
+          "description": "Audit Tabs navigation styling to ensure active/hover rings, borders, and any highlight visuals rely on theme tokens (ring/primary/muted) and look consistent with the new orange accent against grey glass surfaces. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/public/CollectionCards.tsx",
+          "operation": "modify",
+          "description": "Confirm selected/hover states use tokenized ring/shadow (ring-primary, shadow-glass) and that shadow-glass now reflects the updated orange accent without introducing orange-tinted base surfaces. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/public/SearchAndFilters.tsx",
+          "operation": "modify",
+          "description": "Audit Search/Filters panel glass styles, inputs/selects, and icon/text contrast to ensure greys are neutral and readable in both modes, with orange reserved for focus/ring/active accents. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/public/ItemGrid.tsx",
+          "operation": "modify",
+          "description": "Audit item cards for hover lift glow, badge styling, and preview backgrounds to ensure they inherit the new grey-dominant tokens and use orange only for accents (via shadow-glass/ring/primary). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/viewers/MediaViewerModal.tsx",
+          "operation": "modify",
+          "description": "Audit modal surface (glass-strong), title text, and any focus/outline states to ensure consistent grey-neutral glass styling and token-driven accents; ensure no legacy orange hues appear. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/admin/AdminGate.tsx",
+          "operation": "modify",
+          "description": "Audit admin login card/buttons/error text to ensure token-based colors and readable contrast on glass surfaces in both light/dark modes, consistent with public viewer styling. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/admin/AdminBannerManager.tsx",
+          "operation": "modify",
+          "description": "Audit banner manager container, borders, and status states to ensure the base UI remains grey-dominant and consistent with other glass cards; ensure any accent/focus states follow theme tokens. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/admin/AdminCatalogManager.tsx",
+          "operation": "modify",
+          "description": "Audit table/card styling so surfaces and borders use token-driven greys and keep action emphasis consistent with the new accent color (without reintroducing legacy orange). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/admin/AdminUploadForm.tsx",
+          "operation": "modify",
+          "description": "Audit upload form card, inputs/selects, and preview container to ensure consistent grey glass surfaces and token-based focus rings/highlights using the updated orange accent. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-19",
+      "summary": "Remove hardcoded primary-brand colors from component styling and ensure theme-token-based styling applies on fresh load.",
+      "acceptanceCriteria": [
+        "No component relies on hardcoded hex values for the primary brand color when a theme token (e.g., primary/accent/ring) should be used instead.",
+        "A fresh load of the app shows the new theme immediately without requiring manual user steps (e.g., no hidden dependency on cached old CSS)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Eliminate any remaining references tied to the old orange (including comments/legacy literals where they define visible styles) by routing all primary/accent/ring/gradient effects through CSS variables; keep glass utilities (glass/glass-strong/transition-lift/maspar-gradient) token-driven. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Ensure Tailwind theme extensions (maspar colors and boxShadow.glass) do not hardcode legacy orange values and instead align to the updated brand orange #FAA831 (prefer token-derived values where feasible) so builds cannot regress due to stale config. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/layout/Background.tsx",
+          "operation": "modify",
+          "description": "Audit background overlay gradient utilities to confirm the page reads predominantly grey-neutral by default and does not introduce orange tinting; ensure it is driven by background tokens only. Verify the component's usage instructions before implementing."
         }
       ]
     }

@@ -1,14 +1,18 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 5,
-  "summary": "Premium, mobile-responsive Maspar sales team portal (HTML/CSS/JS, CodePen-ready) with public viewer + admin upload, glassmorphism UI in brand colors, localStorage-based catalog management, and protected viewing for PDFs/videos/images.",
+  "projectStateVersion": 9,
+  "summary": "Premium, mobile-responsive Maspar sales team portal (HTML/CSS/JS, CodePen-ready) with public viewer + admin upload, glassmorphism UI in updated brand theme (Orange #FAA831 + 70% grey), localStorage-based catalog management, protected viewing for PDFs/videos/images, English-only labels (no Hindi), and a New Arrivals homepage banner uploaded via Admin (1280x720).",
   "architectural_notes": [
     "Pure HTML/CSS/JS only; CDN libraries allowed (e.g., PDF.js); must run directly on CodePen.",
     "No server backend; persist catalogs/metadata via LocalStorage.",
-    "Content protection is best-effort (disable right-click/drag; no-download UX), not true DRM."
+    "Content protection is best-effort (disable right-click/drag; no-download UX), not true DRM.",
+    "Remove bilingual (English/Hindi) label support and any language toggle; use English-only labels throughout.",
+    "Update brand/theme colors to Orange #FAA831 and a 70% grey dominant UI theme (replace prior orange #F15A22 usage)."
   ],
-  "known_issues": [],
-  "isFixRequest": false,
+  "known_issues": [
+    "User reports requested UI changes were not applied/visible; verify latest build reflects requested updates (especially theme colors)."
+  ],
+  "isFixRequest": true,
   "existing_features": [
     {
       "id": "feature-create-a-mobile-responsive-portal-ui-with-a-premium-glassmorphism-look-using-maspar-brand-colors-orange-f15a22-grey-4a4a4a-white-including-a-header-with-an-orange-gradient-minimal-layout-and-smooth-hover-lift-transition-animations",
@@ -97,6 +101,54 @@
         "REQ-11"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-remove-all-hindi-language-label-support-and-make-the-app-english-only-for-catalog-labels-including-removing-the-en-hi-language-toggle-removing-hindi-label-inputs-in-admin-and-updating-search-filtering-to-use-only-english-labels",
+      "title": "Remove all Hindi-language label support and make the app English-only for catalog labels (including removing the EN/HI language toggle, removing Hindi label inputs in Admin, and updating search/filtering to use only English labels).",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-new-arrivals-banner-feature-allow-admin-to-upload-set-a-banner-image-exact-size-1280x720-px-and-display-it-prominently-on-the-public-viewer-home-page",
+      "title": "Add a \"New Arrivals\" banner feature: allow Admin to upload/set a banner image (exact size 1280x720 px) and display it prominently on the Public Viewer home page.",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-an-edit-action-in-the-admin-catalog-table-so-admin-can-update-existing-catalog-items-title-label-collection-media-type-and-media-source-and-save-changes-to-localstorage",
+      "title": "Add an Edit action in the Admin catalog table so Admin can update existing catalog items (title, label, collection, media type, and media source) and save changes to LocalStorage.",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-label-driven-organization-updates-in-admin-provide-a-way-to-assign-each-predefined-label-to-a-collection-and-add-a-category-field-under-labels-so-admin-can-set-edit-a-category-for-a-label-use-this-configuration-as-the-single-source-of-truth-when-creating-editing-items",
+      "title": "Implement label-driven organization updates in Admin: provide a way to assign each predefined label to a collection and add a \"Category\" field under labels (so Admin can set/edit a category for a label). Use this configuration as the single source of truth when creating/editing items.",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-global-theme-tokens-so-the-app-primary-brand-color-is-orange-faa831-replacing-any-remaining-f15a22-and-the-overall-look-is-a-grey-dominant-70-grey-glassmorphism-theme-while-keeping-orange-as-the-accent-for-key-ui-emphasis-rings-active-states-highlights",
+      "title": "Update the global theme tokens so the app primary brand color is Orange #FAA831 (replacing any remaining #F15A22) and the overall look is a grey-dominant (\"70% grey\") glassmorphism theme, while keeping orange as the accent for key UI emphasis (rings, active states, highlights).",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-updated-theme-changes-are-actually-reflected-in-the-deployed-build-by-removing-avoiding-hardcoded-color-values-in-component-classnames-where-they-override-theme-tokens-and-by-relying-on-the-css-variables-theme-tokens-for-all-primary-secondary-accent-styling",
+      "title": "Ensure the updated theme changes are actually reflected in the deployed build by removing/avoiding hardcoded color values in component classNames where they override theme tokens, and by relying on the CSS variables/theme tokens for all primary/secondary/accent styling.",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -131,12 +183,6 @@
       "status": "pending"
     },
     {
-      "id": "AR-6",
-      "summary": "Search/filter by label/collection and bilingual (Hindi/English) labels",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
       "id": "AR-7",
       "summary": "Persist uploaded content and metadata in LocalStorage (no server)",
       "reqIds": [],
@@ -152,6 +198,46 @@
       "id": "AR-9",
       "summary": "Provide predefined label set and let Admin assign/select collections based on labels (label-driven collection organization)",
       "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Add “New Arrivals” section: Admin uploads a 1280x720 banner and it displays on the home page",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Admin Actions section: add an Edit option to modify existing catalog items/metadata",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-12",
+      "summary": "Update labeling model: admin can assign labels↔collections mapping and add a category field under labels",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-17",
+      "summary": "Update seed/sample data and any existing stored catalog compatibility handling so the app continues to work after switching to English-only labels and introducing label category mapping.",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-18",
+      "summary": "Update UI theme to use orange (#FAA831) with a 70% grey overall theme across the portal",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-20",
+      "summary": "Audit and fix any UI elements that still visually render with the old orange theme or inconsistent greys, ensuring the updated orange + grey theme is applied consistently across the Header, Tabs navigation, Collection cards, Search/Filters panel, Item grid cards, and the Media viewer modal.",
+      "reqIds": [
+        "REQ-18"
+      ],
       "status": "pending"
     }
   ],

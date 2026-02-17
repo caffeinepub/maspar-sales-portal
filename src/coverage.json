@@ -1,50 +1,70 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-17T05:16:19.228Z",
+  "generatedAt": "2026-02-17T06:07:29.006Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 2,
+    "total": 3,
     "implemented": 2,
     "items": [
       {
-        "id": "REQ-10",
-        "summary": "Create a predefined label list based on the uploaded image and make it available to the frontend as a single source of truth. The label list must include: Colorart, Vintage, Hermosa, Rurban, Essentials, Eternal Treasure, Hues, Inhouse, Cotsmere, Little Maspar, Generic, Maspar.",
+        "id": "REQ-17",
+        "summary": "Update the global theme tokens so the app primary brand color is Orange #FAA831 (replacing any remaining #F15A22) and the overall look is a grey-dominant (\"70% grey\") glassmorphism theme, while keeping orange as the accent for key UI emphasis (rings, active states, highlights).",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/lib/predefinedLabels.ts"
+          "frontend/src/index.css",
+          "frontend/tailwind.config.js",
+          "frontend/index.css"
         ],
         "matchedFiles": [
-          "frontend/src/lib/predefinedLabels.ts"
+          "frontend/src/index.css",
+          "frontend/tailwind.config.js"
         ]
       },
       {
-        "id": "REQ-11",
-        "summary": "Update the Admin Upload form so admins can select from the predefined labels instead of typing label text manually. Keep bilingual label support: selecting a predefined label should populate the English label field, and the Hindi label field must remain editable so admins can enter/override Hindi when needed.",
+        "id": "REQ-18",
+        "summary": "Audit and fix any UI elements that still visually render with the old orange theme or inconsistent greys, ensuring the updated orange + grey theme is applied consistently across the Header, Tabs navigation, Collection cards, Search/Filters panel, Item grid cards, and the Media viewer modal.",
+        "status": "missing",
+        "plannedFiles": [
+          "frontend/src/components/layout/MasparLayout.tsx",
+          "frontend/src/App.tsx",
+          "frontend/src/components/public/CollectionCards.tsx",
+          "frontend/src/components/public/SearchAndFilters.tsx",
+          "frontend/src/components/public/ItemGrid.tsx",
+          "frontend/src/components/viewers/MediaViewerModal.tsx",
+          "frontend/src/components/admin/AdminGate.tsx",
+          "frontend/src/components/admin/AdminBannerManager.tsx",
+          "frontend/src/components/admin/AdminCatalogManager.tsx",
+          "frontend/src/components/admin/AdminUploadForm.tsx"
+        ],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-19",
+        "summary": "Ensure the updated theme changes are actually reflected in the deployed build by removing/avoiding hardcoded color values in component classNames where they override theme tokens, and by relying on the CSS variables/theme tokens for all primary/secondary/accent styling.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/admin/AdminUploadForm.tsx",
-          "frontend/src/lib/uiText.ts"
+          "frontend/src/index.css",
+          "frontend/tailwind.config.js",
+          "frontend/src/components/layout/Background.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/admin/AdminUploadForm.tsx",
-          "frontend/src/lib/uiText.ts"
+          "frontend/src/index.css",
+          "frontend/tailwind.config.js"
         ]
       }
     ]
   },
   "changedFiles": [
     "build-request.json",
-    "build-template/README.md",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/components/admin/AdminUploadForm.tsx",
-    "frontend/src/lib/predefinedLabels.ts",
-    "frontend/src/lib/uiText.ts",
+    "frontend/src/index.css",
+    "frontend/tailwind.config.js",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

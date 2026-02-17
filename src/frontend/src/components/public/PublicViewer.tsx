@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import type { CatalogItem, LabelLanguage } from '../../lib/catalogTypes';
 import { getLabelLanguage } from '../../lib/labelLanguage';
 import { getCollections } from '../../lib/collections';
+import { loadBanner, type BannerData } from '../../lib/bannerStorage';
 import { UI_TEXT } from '../../lib/uiText';
 import { SearchAndFilters } from './SearchAndFilters';
 import { CollectionCards } from './CollectionCards';
@@ -18,9 +19,11 @@ export function PublicViewer({ items }: PublicViewerProps) {
   const [language, setLanguage] = useState<LabelLanguage>('en');
   const [selectedItem, setSelectedItem] = useState<CatalogItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [banner, setBanner] = useState<BannerData | null>(null);
 
   useEffect(() => {
     setLanguage(getLabelLanguage());
+    setBanner(loadBanner());
   }, []);
 
   const collections = useMemo(() => getCollections(items), [items]);
@@ -55,6 +58,18 @@ export function PublicViewer({ items }: PublicViewerProps) {
 
   return (
     <div className="space-y-6">
+      {banner && (
+        <div className="rounded-lg overflow-hidden shadow-lg border border-border/50 no-select no-drag">
+          <img
+            src={banner.imageData}
+            alt="New Arrivals"
+            className="w-full h-auto"
+            draggable="false"
+            onContextMenu={(e) => e.preventDefault()}
+          />
+        </div>
+      )}
+
       <SearchAndFilters
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}

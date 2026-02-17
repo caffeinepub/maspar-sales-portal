@@ -5,28 +5,28 @@
 @layer base {
     :root {
         --radius: 0.75rem;
-        /* Maspar Orange #F15A22 as primary */
-        --background: 0.98 0.01 30;
-        --foreground: 0.25 0.02 30;
-        --card: 0.99 0.005 30 / 0.7;
-        --card-foreground: 0.25 0.02 30;
-        --popover: 0.99 0.005 30 / 0.95;
-        --popover-foreground: 0.25 0.02 30;
-        /* Maspar Orange */
-        --primary: 0.62 0.19 35;
-        --primary-foreground: 1 0 0;
+        /* Light mode: Grey-dominant with Orange #FAA831 accents */
+        --background: 0.96 0.005 270;
+        --foreground: 0.25 0.01 270;
+        --card: 0.92 0.005 270 / 0.7;
+        --card-foreground: 0.25 0.01 270;
+        --popover: 0.94 0.005 270 / 0.95;
+        --popover-foreground: 0.25 0.01 270;
+        /* Maspar Orange #FAA831 */
+        --primary: 0.75 0.15 65;
+        --primary-foreground: 0.15 0.01 270;
         /* Grey #4A4A4A */
-        --secondary: 0.35 0.01 30;
-        --secondary-foreground: 1 0 0;
-        --muted: 0.95 0.01 30;
-        --muted-foreground: 0.50 0.01 30;
-        --accent: 0.62 0.19 35 / 0.15;
-        --accent-foreground: 0.25 0.02 30;
+        --secondary: 0.35 0.01 270;
+        --secondary-foreground: 0.98 0.005 270;
+        --muted: 0.88 0.005 270;
+        --muted-foreground: 0.50 0.01 270;
+        --accent: 0.75 0.15 65 / 0.12;
+        --accent-foreground: 0.25 0.01 270;
         --destructive: 0.577 0.245 27.325;
         --destructive-foreground: 0.985 0 0;
-        --border: 0.88 0.01 30 / 0.3;
-        --input: 0.88 0.01 30 / 0.4;
-        --ring: 0.62 0.19 35;
+        --border: 0.80 0.005 270 / 0.25;
+        --input: 0.82 0.005 270 / 0.35;
+        --ring: 0.75 0.15 65;
         --chart-1: 0.646 0.222 41.116;
         --chart-2: 0.6 0.118 184.704;
         --chart-3: 0.398 0.07 227.392;
@@ -35,25 +35,26 @@
     }
 
     .dark {
-        --background: 0.15 0.01 30;
-        --foreground: 0.98 0.01 30;
-        --card: 0.20 0.01 30 / 0.7;
-        --card-foreground: 0.98 0.01 30;
-        --popover: 0.18 0.01 30 / 0.95;
-        --popover-foreground: 0.98 0.01 30;
-        --primary: 0.62 0.19 35;
-        --primary-foreground: 1 0 0;
-        --secondary: 0.35 0.01 30;
-        --secondary-foreground: 1 0 0;
-        --muted: 0.25 0.01 30;
-        --muted-foreground: 0.65 0.01 30;
-        --accent: 0.62 0.19 35 / 0.2;
-        --accent-foreground: 0.98 0.01 30;
+        /* Dark mode: Grey-dominant with Orange #FAA831 accents */
+        --background: 0.18 0.005 270;
+        --foreground: 0.95 0.005 270;
+        --card: 0.22 0.005 270 / 0.7;
+        --card-foreground: 0.95 0.005 270;
+        --popover: 0.20 0.005 270 / 0.95;
+        --popover-foreground: 0.95 0.005 270;
+        --primary: 0.75 0.15 65;
+        --primary-foreground: 0.15 0.01 270;
+        --secondary: 0.35 0.01 270;
+        --secondary-foreground: 0.98 0.005 270;
+        --muted: 0.28 0.005 270;
+        --muted-foreground: 0.62 0.005 270;
+        --accent: 0.75 0.15 65 / 0.15;
+        --accent-foreground: 0.95 0.005 270;
         --destructive: 0.704 0.191 22.216;
         --destructive-foreground: 0.98 0 0;
-        --border: 0.30 0.01 30 / 0.3;
-        --input: 0.30 0.01 30 / 0.4;
-        --ring: 0.62 0.19 35;
+        --border: 0.32 0.005 270 / 0.25;
+        --input: 0.34 0.005 270 / 0.35;
+        --ring: 0.75 0.15 65;
     }
 
     * {
@@ -110,6 +111,6 @@
     
     /* Orange gradient header */
     .maspar-gradient {
-        background: linear-gradient(135deg, oklch(0.62 0.19 35) 0%, oklch(0.55 0.17 30) 100%);
+        background: linear-gradient(135deg, oklch(0.75 0.15 65) 0%, oklch(0.68 0.13 60) 100%);
     }
 }

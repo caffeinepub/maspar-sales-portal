@@ -57,7 +57,7 @@ export default {
                     5: 'oklch(var(--chart-5))'
                 },
                 maspar: {
-                    orange: '#F15A22',
+                    orange: '#FAA831',
                     grey: '#4A4A4A'
                 }
             },
@@ -68,7 +68,7 @@ export default {
             },
             boxShadow: {
                 xs: '0 1px 2px 0 rgba(0,0,0,0.05)',
-                glass: '0 8px 32px 0 rgba(241, 90, 34, 0.1)'
+                glass: '0 8px 32px 0 rgba(250, 168, 49, 0.12)'
             },
             keyframes: {
                 'accordion-down': {

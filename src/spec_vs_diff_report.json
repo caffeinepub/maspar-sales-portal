@@ -1,24 +1,57 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-17T05:16:19.226Z",
-  "summary": "REQ-10 and REQ-11 appear implemented: a dedicated predefined-labels module is added exporting exactly the 12 required labels, and AdminUploadForm is updated to include a dropdown listing these labels that auto-populates the English label field while keeping the Hindi label input present/editable (as far as can be seen in the truncated diff). No evidence of Hindi UI strings being introduced.",
-  "missing_requirements": [],
-  "hallucinated_features": [
+  "generatedAt": "2026-02-17T06:07:29.004Z",
+  "summary": "Theme token updates for orange (#FAA831) and grey-dominant glassmorphism were applied in global CSS and Tailwind config, but there’s no diff evidence of auditing/updating specific UI components to remove old hardcoded colors or ensure consistency across Header/Tabs/Cards/Modal. Additionally, non-theme feature descriptions were introduced/updated in state/summary files.",
+  "missing_requirements": [
     {
-      "description": "Added helper type guard `isPredefinedLabel` (and `PredefinedLabel` type) beyond the requirement to export the predefined label set.",
-      "reason": "REQ-10 only requires exporting the label set as an array (single source of truth). The additional runtime/type utilities were not requested.",
+      "id": "REQ-18",
+      "requirement": "Audit and fix UI elements still rendering with old orange (#F15A22) or inconsistent greys across Header, Tabs navigation, Collection cards, Search/Filters panel, Item grid cards, and Media viewer modal.",
+      "reason": "Diff shows only global theme/token changes (index.css, tailwind.config.js) and does not show any component-level updates in the listed UI areas to ensure old orange is removed and greys are consistent.",
       "evidence": [
-        "frontend/src/lib/predefinedLabels.ts"
+        "frontend/src/index.css",
+        "frontend/tailwind.config.js"
+      ]
+    },
+    {
+      "id": "REQ-19",
+      "requirement": "Remove/avoid hardcoded color values in component classNames that override theme tokens; rely on CSS variables/theme tokens for primary/secondary/accent styling so the new theme reflects immediately.",
+      "reason": "No component files are shown as modified in the diff summary; only theme token definitions/config were updated, so there is no evidence that hardcoded hex values in component classNames were audited/removed.",
+      "evidence": [
+        "frontend/src/index.css",
+        "frontend/tailwind.config.js"
       ]
     }
   ],
-  "confidence": 0.82,
+  "hallucinated_features": [
+    {
+      "description": "Added/updated documentation/state describing a \"New Arrivals\" homepage banner uploaded via Admin (1280x720).",
+      "reason": "BuildRequest is theme-only and explicitly lists non-goals as not adding new product features or changing portal information architecture.",
+      "evidence": [
+        "project_state.json"
+      ]
+    },
+    {
+      "description": "Added/updated documentation/state describing label language behavior (e.g., \"English-only labels (no Hindi)\"), which is unrelated to theme fix and conflicts with other file summary claims about bilingual labels.",
+      "reason": "BuildRequest is theme-only and includes a non-goal to not change LocalStorage data formats/auth/catalog behavior; these label/auth/catalog feature descriptions are out of scope for the theme change request.",
+      "evidence": [
+        "project_state.json",
+        "frontend-file-summaries.txt"
+      ]
+    },
+    {
+      "description": "Added/updated documentation describing an Admin upload form feature: predefined label dropdown that auto-fills English label input.",
+      "reason": "Not requested (theme-only request; non-goals prohibit adding new product features).",
+      "evidence": [
+        "frontend-file-summaries.txt"
+      ]
+    }
+  ],
+  "confidence": 0.72,
   "changed_files": [
     "frontend-file-summaries.txt",
-    "frontend/src/components/admin/AdminUploadForm.tsx",
-    "frontend/src/lib/predefinedLabels.ts",
-    "frontend/src/lib/uiText.ts",
+    "frontend/src/index.css",
+    "frontend/tailwind.config.js",
     "project_state.json"
   ]
 }
